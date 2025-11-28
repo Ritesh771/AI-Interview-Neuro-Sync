@@ -1,10 +1,8 @@
 "use client";
 
-
 import React, { useState } from 'react'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion'
 import Image from "next/image";
-
 
 const interviewTips = [
     {
@@ -13,7 +11,7 @@ const interviewTips = [
     },
     {
         head: "Master Unpredictable Questions",
-        subhead: "Curveball questions, behavioral scenarios, or technical challenges can catch even the most prepared candidates off guard. You need to think on your feet and impress. With AI mock interviews, you’ll face tough, realistic questions and get instant feedback to sharpen your responses—ensuring you’re ready for anything."
+        subhead: "Curveball questions, behavioral scenarios, or technical challenges can catch even the most prepared candidates off guard. You need to think on your feet and impress. With AI mock interviews, you'll face tough, realistic questions and get instant feedback to sharpen your responses—ensuring you're ready for anything."
     },
     {
         head: "Get the Feedback You Deserve",
@@ -21,7 +19,7 @@ const interviewTips = [
     },
     {
         head: "Unlock Unlimited Practice Opportunities",
-        subhead: "Scheduling mock interviews with friends or mentors can be tricky—conflicts, availability, and inconsistent feedback make it hard to prepare. You want reliable, high-quality practice on your terms. With AI mock interviews, practice anytime, anywhere, at your pace, so you’re always interview-ready."
+        subhead: "Scheduling mock interviews with friends or mentors can be tricky—conflicts, availability, and inconsistent feedback make it hard to prepare. You want reliable, high-quality practice on your terms. With AI mock interviews, practice anytime, anywhere, at your pace, so you're always interview-ready."
     },
     {
         head: "Showcase Your Strengths with Confidence",
@@ -29,16 +27,11 @@ const interviewTips = [
     }
 ];
 
-
 const ShowcaseBanner3 = () => {
-
     const [selected, setSelected] = useState<Record<string, boolean>>({});
-
-
 
     const selectAccordion = (id: string) => {
         setSelected((prev) => {
-
             if (prev[id]) {
                 return {
                     ...prev,
@@ -54,39 +47,67 @@ const ShowcaseBanner3 = () => {
                 ...prev,
                 [id]: !prev[id]
             }
-
         });
     };
 
     return (
-        <article className='pb-10'>
-            <section className='flex flex-col md:flex-row justify-items-start gap-10 pt-12 pb-12 items-center'>
-                <h3 className='w-fit blue-head text-center sm:text-left px-4 text-2xl sm:text-4xl'>How AI Mock Interviews Can Help You Succeed
-                </h3>
-                <p className='max-w-2/3'>Stop feeling unprepared and anxious. Discover how AI-powered mock interviews help you ace your next job interview with confidence.</p>
+        <article className='pb-16'>
+            <section className='flex flex-col md:flex-row justify-between gap-8 md:gap-12 pt-8 md:pt-12 pb-12 items-center'>
+                <h2 className='text-3xl md:text-4xl font-bold text-center md:text-left bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent'>
+                    How AI Mock Interviews Can Help You Succeed
+                </h2>
+                <p className='max-w-2xl text-center md:text-left text-lg text-gray-700 leading-relaxed'>
+                    Stop feeling unprepared and anxious. Discover how AI-powered mock interviews help you ace your next job interview with confidence.
+                </p>
             </section>
             <section>
-                <Accordion type="single" className='flex flex-col gap-10' collapsible>
+                <Accordion type="single" className='flex flex-col gap-6' collapsible>
                     {
                         interviewTips.map((item, index) => {
-                            return <AccordionItem className='border-0' onClick={() => selectAccordion(index.toString())} key={index} value={`item-${index}`}>
-                                <AccordionTrigger className={` transition-all duration-400 border-[1px]  ${selected[index.toString()] ? "border-black  rounded-[45px] border-2 rounded-b-none border-b-0 bg-blue-200 " : "bg-gray  rounded-[45px]  border-b-8 border-black "}  items-center overflow-hidden  h-[160px] ${index % 2 ? "justify-end" : "justify-start"}  p-10 w-full `}>
-                                    <div className='flex items-center gap-3'>
-                                        <span className='text-6xl'>0{index + 1}</span>
-                                        {item.head}
-                                    </div>
-                                </AccordionTrigger>
-                                <AccordionContent className={`bg-blue-200 p-5 rounded-[45px] border-[1px] border-black ${selected[index.toString()] && "border-b-8 rounded-none rounded-b-[45px]"}`}>
-                                    {item.subhead}
-                                </AccordionContent>
-                            </AccordionItem>
+                            return (
+                                <AccordionItem 
+                                    className='border-0 rounded-3xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300' 
+                                    onClick={() => selectAccordion(index.toString())} 
+                                    key={index} 
+                                    value={`item-${index}`}
+                                >
+                                    <AccordionTrigger 
+                                        className={`transition-all duration-300 flex justify-between items-center p-6 md:p-8 w-full text-left ${
+                                            selected[index.toString()] 
+                                                ? "bg-gradient-to-r from-blue-600 to-indigo-700 text-white" 
+                                                : "bg-white text-gray-900 hover:bg-gray-50"
+                                        }`}
+                                    >
+                                        <div className='flex items-center gap-4'>
+                                            <span className={`text-2xl font-bold w-12 h-12 flex items-center justify-center rounded-full ${
+                                                selected[index.toString()] 
+                                                    ? "bg-white text-blue-600" 
+                                                    : "bg-blue-100 text-blue-600"
+                                            }`}>
+                                                0{index + 1}
+                                            </span>
+                                            <span className='text-xl md:text-2xl font-bold'>{item.head}</span>
+                                        </div>
+                                        <div className={`transform transition-transform duration-300 ${
+                                            selected[index.toString()] ? 'rotate-180' : ''
+                                        }`}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        </div>
+                                    </AccordionTrigger>
+                                    <AccordionContent className={`bg-white p-6 md:p-8 transition-all duration-300 ${
+                                        selected[index.toString()] 
+                                            ? "border-t border-gray-200" 
+                                            : ""
+                                    }`}>
+                                        <p className='text-gray-700 text-lg leading-relaxed'>{item.subhead}</p>
+                                    </AccordionContent>
+                                </AccordionItem>
+                            );
                         })
                     }
-
                 </Accordion>
-
-
-
             </section>
         </article>
     )
