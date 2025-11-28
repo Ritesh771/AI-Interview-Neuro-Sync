@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
 import "../../globals.css";
@@ -10,6 +9,7 @@ import { Suspense } from "react";
 import Loader from "@/app/components/ui/loader";
 import { Toaster } from "@/app/components/ui/sonner";
 import { useQuery } from '@tanstack/react-query';
+import Watermark from "@/app/components/ui/watermark";
 
 const spaceGrotesk = Space_Grotesk({
     variable: "--font-geist-mono",
@@ -53,6 +53,7 @@ export default async function Layout({
                             </Tabs>
                         </Provider>
                         <Toaster />
+                        <Watermark />
                     </div>
                 </div>
             </body>

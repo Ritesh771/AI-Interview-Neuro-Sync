@@ -1,9 +1,8 @@
-
 import UserProfileIcon from "@/app/components/auth/user-profile-icon";
 import "../../../../globals.css";
 import type { Metadata } from "next";
 import Provider from "@/app/provider";
-
+import Watermark from "@/app/components/ui/watermark";
 
 
 export const metadata: Metadata = {
@@ -36,6 +35,7 @@ export default function RootLayout({
             <Provider>
               {children}
             </Provider>
+            <Watermark />
           </div>
         </div>
       </body>

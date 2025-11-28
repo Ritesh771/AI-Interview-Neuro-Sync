@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
 import "../../globals.css";
@@ -6,6 +5,7 @@ import NavBar from "@/app/components/home/nav-bar";
 import Provider from "@/app/provider";
 import { ReactLenis } from "@/app/lib/lenis";
 import Footer from "../../components/home/footer";
+import Watermark from "@/app/components/ui/watermark";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-geist-mono",
@@ -38,10 +38,10 @@ export default async function Layout({
             <NavBar />
             {children}
             <Footer />
+            <Watermark />
           </Provider>
         </ReactLenis>
       </body>
     </html>
-
   );
 }

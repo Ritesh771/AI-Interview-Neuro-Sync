@@ -1,5 +1,6 @@
 import "../globals.css";
 import { Space_Grotesk } from 'next/font/google'
+import Watermark from "@/app/components/ui/watermark";
 
 const grotesk = Space_Grotesk({
     subsets: ['latin'],
@@ -18,6 +19,7 @@ export default function RootLayout({ children, }: { children: React.ReactNode })
         <html lang="en" className={`${grotesk.className} h-full w-full`}>
             <body className="bg-[#FFFFFF] h-full w-full">
                 {children}
+                <Watermark />
             </body>
         </html>
     )
