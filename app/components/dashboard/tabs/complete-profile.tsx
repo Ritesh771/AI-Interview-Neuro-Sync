@@ -420,6 +420,131 @@ const CompleteProfileTab = () => {
             </CardContent>
           </Card>
         )}
+
+        {/* Structured Profile Display */}
+        <Card className='shadow-lg bg-gradient-to-br from-white to-blue-50'>
+          <CardHeader>
+            <CardTitle className='text-2xl text-center text-gray-800'>Your Structured Profile</CardTitle>
+          </CardHeader>
+          <CardContent className='space-y-8'>
+            {formData.summary && (
+              <div className='bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500'>
+                <h3 className='text-xl font-bold mb-3 text-gray-800'>
+                  Professional Summary
+                </h3>
+                <p className='text-gray-700 whitespace-pre-line leading-relaxed'>{formData.summary}</p>
+              </div>
+            )}
+
+            {formData.workExperience && (
+              <div className='bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500'>
+                <h3 className='text-xl font-bold mb-4 text-gray-800'>
+                  Work Experience
+                </h3>
+                <div className='space-y-4'>
+                  {formData.workExperience.split('\n\n').map((experience, index) => (
+                    <div key={index} className='relative pl-8 border-l-2 border-gray-200'>
+                      <div className='absolute -left-2 top-0 w-4 h-4 rounded-full bg-green-500'></div>
+                      <div className='whitespace-pre-line text-gray-700'>
+                        {experience}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {formData.projects && (
+              <div className='bg-white rounded-xl shadow-md p-6 border-l-4 border-purple-500'>
+                <h3 className='text-xl font-bold mb-4 text-gray-800'>
+                  Projects
+                </h3>
+                <div className='space-y-4'>
+                  {formData.projects.split('\n\n').map((project, index) => {
+                    // Parse project details
+                    const lines = project.split('\n');
+                    const title = lines[0] || '';
+                    const details = lines.slice(1).join('\n');
+                    
+                    return (
+                      <div key={index} className='border border-gray-200 rounded-lg p-5 hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-white to-gray-50'>
+                        <div className='flex items-start mb-3'>
+                          <div className='mr-3 mt-1'>
+                            <div className='w-3 h-3 rounded-full bg-purple-500'></div>
+                          </div>
+                          <h4 className='text-lg font-bold text-gray-800'>{title}</h4>
+                        </div>
+                        <div className='ml-6'>
+                          <div className='whitespace-pre-line text-gray-700 text-sm leading-relaxed'>
+                            {details}
+                          </div>
+                          <div className='mt-4 flex flex-wrap gap-2'>
+                            <span className='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800'>
+                              Project
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {formData.skills && (
+              <div className='bg-white rounded-xl shadow-md p-6 border-l-4 border-yellow-500'>
+                <h3 className='text-xl font-bold mb-4 text-gray-800'>
+                  Skills
+                </h3>
+                <div className='flex flex-wrap gap-2'>
+                  {formData.skills.split(',').map((skill, index) => (
+                    <span key={index} className='px-3 py-1.5 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium'>
+                      {skill.trim()}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {formData.education && (
+              <div className='bg-white rounded-xl shadow-md p-6 border-l-4 border-red-500'>
+                <h3 className='text-xl font-bold mb-4 text-gray-800'>
+                  Education
+                </h3>
+                <div className='space-y-4'>
+                  {formData.education.split('\n\n').map((edu, index) => (
+                    <div key={index} className='relative pl-8 border-l-2 border-gray-200'>
+                      <div className='absolute -left-2 top-0 w-4 h-4 rounded-full bg-red-500'></div>
+                      <div className='whitespace-pre-line text-gray-700'>
+                        {edu}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {formData.certifications && (
+              <div className='bg-white rounded-xl shadow-md p-6 border-l-4 border-indigo-500'>
+                <h3 className='text-xl font-bold mb-4 text-gray-800'>
+                  Certifications
+                </h3>
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
+                  {formData.certifications.split('\n').map((cert, index) => (
+                    <div key={index} className='flex items-center p-3 bg-indigo-50 rounded-lg'>
+                      <div className='mr-3 text-indigo-500'>
+                        <svg xmlns='http://www.w3.org/2000/svg' className='h-5 w-5' viewBox='0 0 20 20' fill='currentColor'>
+                          <path fillRule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z' clipRule='evenodd' />
+                        </svg>
+                      </div>
+                      <span className='text-gray-700'>{cert.trim()}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
     )
   }
