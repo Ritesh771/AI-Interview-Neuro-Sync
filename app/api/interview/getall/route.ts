@@ -41,17 +41,22 @@ export async function GET(req: NextRequest) {
         feedBack: interview.feedBack?.feedBack || null,
         totalScore: interview.feedBack ? 
           // For aptitude rounds, use problemSolving score directly
+          // For coding interviews, use problemSolving score (pass/fail percentage)
           // For other rounds, use average of all metrics
           interview.type === 'gemini-aptitude' || interview.type?.startsWith('gemini-') ?
             interview.feedBack.problemSolving :
-            Math.round((
-              interview.feedBack.problemSolving +
-              interview.feedBack.systemDesign +
-              interview.feedBack.communicationSkills +
-              interview.feedBack.technicalAccuracy +
-              interview.feedBack.behavioralResponses +
-              interview.feedBack.timeManagement
-            ) / 6) : null
+            // Check if it's a coding interview (problemSolving = systemDesign = technicalAccuracy)
+            (interview.feedBack.problemSolving === interview.feedBack.systemDesign && 
+             interview.feedBack.systemDesign === interview.feedBack.technicalAccuracy) ?
+              interview.feedBack.problemSolving :
+              Math.round((
+                interview.feedBack.problemSolving +
+                interview.feedBack.systemDesign +
+                interview.feedBack.communicationSkills +
+                interview.feedBack.technicalAccuracy +
+                interview.feedBack.behavioralResponses +
+                interview.feedBack.timeManagement
+              ) / 6) : null
       };
     });
 

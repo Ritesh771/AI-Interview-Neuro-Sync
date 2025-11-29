@@ -19,14 +19,17 @@ export async function POST(req: NextRequest) {
     }
 
     // Create feedback record for coding interview
+    const passedQuestions = results.scores.filter((score: number) => score === 100).length;
+    const totalQuestions = results.scores.length;
+    
     const feedbackData = {
       interviewId: interviewId,
-      userId: session.user.id, // This is uid, but should be doc id? Wait, for consistency, change to doc id.
-      feedBack: `Coding interview completed with average score: ${results.averageScore}%. Status: ${results.passed ? 'Passed' : 'Failed'}`,
-      problemSolving: results.averageScore, // Using average score as problem solving metric
-      systemDesign: results.averageScore, // Using average score as system design metric
+      userId: session.user.id,
+      feedBack: `Coding interview completed. ${passedQuestions} out of ${totalQuestions} challenges solved correctly (${results.averageScore}% success rate). ${results.passed ? 'Overall: PASSED' : 'Overall: FAILED'}`,
+      problemSolving: results.averageScore, // Percentage of correct solutions
+      systemDesign: results.averageScore, // Using same score for consistency
       communicationSkills: 0, // Not applicable for coding interviews
-      technicalAccuracy: results.averageScore, // Using average score as technical accuracy
+      technicalAccuracy: results.averageScore, // Percentage of correct solutions
       behavioralResponses: 0, // Not applicable for coding interviews
       timeManagement: 0, // Not applicable for coding interviews
     };

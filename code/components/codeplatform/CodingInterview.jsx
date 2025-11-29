@@ -17,6 +17,14 @@ const CodingInterview = ({ interviewData, onComplete }) => {
     const manualInputRef = useRef("");
     const currentChallenge = interviewData.challenges[currentQuestionIndex];
     
+    // Reset editor code and test results when moving to next question
+    useEffect(() => {
+        if (editorRef.current) {
+            editorRef.current.setCode('');
+        }
+        setTestResults([]);
+    }, [currentQuestionIndex]);
+    
     // Set initial time based on difficulty of each challenge
     useEffect(() => {
         if (interviewData && interviewData.challenges) {
@@ -82,7 +90,7 @@ const CodingInterview = ({ interviewData, onComplete }) => {
     
     const normalizeOutput = (value) => {
         if (value === null || value === undefined) return "";
-        return value.toString().trim();
+        return value.toString().trim().toLowerCase();
     };
 
     const runManualExecution = async (code, language, stdin) => {
@@ -131,32 +139,60 @@ const CodingInterview = ({ interviewData, onComplete }) => {
         setTestResults([]);
         
         try {
-            // Execute the code with the first sample test case input
-            const testCase = currentChallenge.sampleTestCases[0];
-            
-            const result = await executeCode(language, code, testCase.input);
-            const actualOutput = normalizeOutput(result.run.stdout || result.run.output);
-            const expectedOutput = normalizeOutput(testCase.output);
-            const passed = !result.run.stderr && actualOutput === expectedOutput;
-            
-            const results = [
-                {
-                    testCaseIndex: 0,
+            if (!currentChallenge) {
+                throw new Error("No current challenge found");
+            }
+
+            const testCases = currentChallenge.sampleTestCases;
+
+            if (testCases.length === 0) {
+                throw new Error("No sample test cases found");
+            }
+
+            // Run code against all sample test cases
+            const results = [];
+            let allTestsPassed = true;
+
+            for (let i = 0; i < testCases.length; i++) {
+                const testCase = testCases[i];
+                const result = await executeCode(language, code, testCase.input);
+                const rawActualOutput = result.run.stdout || result.run.output || "";
+                const actualOutput = normalizeOutput(rawActualOutput);
+                const expectedOutput = normalizeOutput(testCase.output);
+                const testCasePassed = !result.run.stderr && actualOutput === expectedOutput;
+
+                results.push({
+                    testCaseIndex: i,
                     input: testCase.input,
-                    expectedOutput: expectedOutput,
-                    actualOutput: actualOutput || "(empty)",
-                    passed,
-                    error: result.run.stderr || null,
-                },
-            ];
-            
-            setTestResults(results);
+                    expectedOutput: testCase.output,
+                    actualOutput: rawActualOutput || "(empty)",
+                    passed: testCasePassed,
+                    error: result.run.stderr || null
+                });
+
+                if (!testCasePassed) {
+                    allTestsPassed = false;
+                }
+            }
+
+            // Set scores for the current question
+            const questionScore = allTestsPassed ? 100 : 0;
+            const newScores = [...scores];
+            newScores[currentQuestionIndex] = questionScore;
+            setScores(newScores);
+
+            // Show detailed test results
+            setTestResults(results.map((result, index) => ({
+                ...result,
+                expectedOutput: `Expected: ${result.expectedOutput}`,
+                actualOutput: `Actual: ${result.actualOutput}${result.error ? `\nError: ${result.error}` : ''}`
+            })));
         } catch (error) {
-            console.error("Error executing code:", error);
+            console.error("Error running sample tests:", error);
             setTestResults([{
                 testCaseIndex: 0,
-                input: currentChallenge.sampleTestCases[0].input,
-                expectedOutput: currentChallenge.sampleTestCases[0].output,
+                input: "N/A",
+                expectedOutput: "N/A",
                 actualOutput: "Error occurred during execution",
                 passed: false,
                 error: error.message || "Unknown error"
@@ -172,84 +208,57 @@ const CodingInterview = ({ interviewData, onComplete }) => {
         setTestResults([]);
 
         try {
-            if (!currentChallenge) {
-                throw new Error("No current challenge found");
-            }
-
-            if (!currentChallenge.sampleTestCases || currentChallenge.sampleTestCases.length === 0) {
-                throw new Error("No test cases found for current challenge");
-            }
-
-            // Run only the first sample test case for UI display
-            const sampleTestCase = currentChallenge.sampleTestCases[0];
-            const result = await executeCode(language, code, sampleTestCase.input);
-            const actualOutput = normalizeOutput(result.run.stdout || result.run.output);
-            const expectedOutput = normalizeOutput(sampleTestCase.output);
-            const testCasePassed = !result.run.stderr && actualOutput === expectedOutput;
-
-            // Get AI evaluation for the code
-            let aiScore = 0;
-            let aiFeedback = "AI evaluation unavailable - using test case result";
-            let aiEvaluation = null;
-
-            try {
-                const aiEvaluationResponse = await fetch('/api/interview/code-evaluation', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        code,
-                        language,
-                        problemTitle: currentChallenge.title,
-                        problemDescription: currentChallenge.description,
-                        testCasePassed,
-                        testInput: sampleTestCase.input,
-                        testOutput: actualOutput,
-                        expectedOutput: expectedOutput,
-                        actualOutput: actualOutput
-                    }),
-                });
-
-                if (aiEvaluationResponse.ok) {
-                    const aiResult = await aiEvaluationResponse.json();
-                    aiScore = aiResult.evaluation.score;
-                    aiFeedback = aiResult.evaluation.feedback;
-                    aiEvaluation = aiResult.evaluation;
-                } else {
-                    console.warn('AI evaluation failed, falling back to test case scoring');
-                    // Fallback: score based on test case result
-                    aiScore = testCasePassed ? 85 : 35; // Good score if test passes, low if fails
-                    aiFeedback = testCasePassed 
-                        ? "Test case passed - basic solution implemented correctly"
-                        : "Test case failed - solution needs improvement";
+            // If tests haven't been run yet, run them now
+            if (scores[currentQuestionIndex] === undefined) {
+                if (!currentChallenge) {
+                    throw new Error("No current challenge found");
                 }
-            } catch (error) {
-                console.warn('AI evaluation error, falling back to test case scoring:', error);
-                // Fallback: score based on test case result
-                aiScore = testCasePassed ? 85 : 35;
-                aiFeedback = testCasePassed 
-                    ? "Test case passed - basic solution implemented correctly"
-                    : "Test case failed - solution needs improvement";
+
+                const testCases = currentChallenge.sampleTestCases;
+
+                if (testCases.length === 0) {
+                    throw new Error("No sample test cases found");
+                }
+
+                // Run code against sample test cases
+                const results = [];
+                let allTestsPassed = true;
+
+                for (let i = 0; i < testCases.length; i++) {
+                    const testCase = testCases[i];
+                    const result = await executeCode(language, code, testCase.input);
+                    const rawActualOutput = result.run.stdout || result.run.output || "";
+                    const actualOutput = normalizeOutput(rawActualOutput);
+                    const expectedOutput = normalizeOutput(testCase.output);
+                    const testCasePassed = !result.run.stderr && actualOutput === expectedOutput;
+
+                    results.push({
+                        testCaseIndex: i,
+                        input: testCase.input,
+                        expectedOutput: testCase.output,
+                        actualOutput: rawActualOutput || "(empty)",
+                        passed: testCasePassed,
+                        error: result.run.stderr || null
+                    });
+
+                    if (!testCasePassed) {
+                        allTestsPassed = false;
+                    }
+                }
+
+                // Set scores for the current question
+                const questionScore = allTestsPassed ? 100 : 0;
+                const newScores = [...scores];
+                newScores[currentQuestionIndex] = questionScore;
+                setScores(newScores);
+
+                // Show test results briefly before moving
+                setTestResults(results.map((result, index) => ({
+                    ...result,
+                    expectedOutput: `Expected: ${result.expectedOutput}`,
+                    actualOutput: `Actual: ${result.actualOutput}${result.error ? `\nError: ${result.error}` : ''}`
+                })));
             }
-
-            // Show only the sample test case result with AI feedback
-            const evaluationSummary = {
-                label: "AI Code Evaluation",
-                testCaseIndex: 0,
-                input: `Test Case: ${testCasePassed ? 'PASSED' : 'FAILED'}`,
-                expectedOutput: `AI Score: ${aiScore}%`,
-                actualOutput: aiFeedback,
-                passed: aiScore >= 70,
-                error: null,
-                aiEvaluation: aiEvaluation
-            };
-            setTestResults([evaluationSummary]);
-
-            // Update scores using AI score
-            const newScores = [...scores];
-            newScores[currentQuestionIndex] = aiScore;
-            setScores(newScores);
 
             // Move to next question or complete interview
             if (currentQuestionIndex < interviewData.challenges.length - 1) {
@@ -263,7 +272,7 @@ const CodingInterview = ({ interviewData, onComplete }) => {
                 testCaseIndex: 0,
                 input: "N/A",
                 expectedOutput: "N/A",
-                actualOutput: "Error occurred during AI evaluation",
+                actualOutput: "Error occurred during evaluation",
                 passed: false,
                 error: error.message || "Unknown error"
             }]);
@@ -452,7 +461,6 @@ const CodingInterview = ({ interviewData, onComplete }) => {
                         <CodeEditor 
                             roomId={roomId} 
                             ref={editorRef}
-                            onRun={runManualExecution}
                             onSubmit={submitCode}
                             isRunning={isRunning}
                         />
