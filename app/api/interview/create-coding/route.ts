@@ -184,6 +184,7 @@ export async function POST(req: NextRequest) {
       difficultyLevel,
       noOfQuestions,
       userId,
+      interviewType,
     } = await req.json();
 
     // Generate coding challenges using Google Gemini
@@ -287,6 +288,7 @@ export async function POST(req: NextRequest) {
       difficultyLevel: difficultyLevel as string,
       noOfQuestions: noOfQuestions,
       userId: userId as string,
+      interviewType: interviewType as string,
       isCompleted: false,
       // Store the coding interview data as JSON
       questions: codingInterview as any,

@@ -30,6 +30,18 @@ export async function GET(req: NextRequest) {
         createdAt = new Date();
       }
 
+      // Determine interview type based on existing data
+      let interviewType = interview.interviewType;
+      if (!interviewType) {
+        if (interview.type?.startsWith('gemini-')) {
+          interviewType = 'Aptitude Round';
+        } else if (interview.questions && typeof interview.questions === 'object' && interview.questions.challenges) {
+          interviewType = 'Coding Round';
+        } else {
+          interviewType = 'Live Voice Interview';
+        }
+      }
+
       return {
         id: interview.id,
         name: interview.name,
@@ -37,6 +49,7 @@ export async function GET(req: NextRequest) {
         role: interview.role,
         difficultyLevel: interview.difficultyLevel,
         isCompleted: interview.isCompleted,
+        interviewType: interviewType,
         createdAt: createdAt.toISOString(), // Convert to ISO string for proper serialization
         feedBack: interview.feedBack?.feedBack || null,
         totalScore: interview.feedBack ? 

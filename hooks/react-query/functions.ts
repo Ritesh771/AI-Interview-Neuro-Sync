@@ -2,9 +2,9 @@ type interviewsType = {
   name: string;
   id: string;
   createdAt: string; // ISO string from API
-  type: string;
   role: string;
   difficultyLevel: string;
+  interviewType: string;
   isCompleted: boolean | null;
   feedBack?: string | null;
   totalScore?: number | null;

@@ -13,6 +13,7 @@ const CreateInterviewSchema = z.object({
   difficultyLevel: z.string().trim().min(2),
   noOfQuestions: z.number().nonnegative(),
   userId: z.string().nonempty(),
+  interviewType: z.string().trim().min(2),
 });
 
 export async function handleCreateInterviewFormAction(
@@ -33,6 +34,7 @@ export async function handleCreateInterviewFormAction(
       noOfQuestions: formData.get("numberOfQuestions")
         ? parseInt(formData.get("numberOfQuestions") as string)
         : null,
+      interviewType: formData.get("interviewType") || "Live Voice Interview",
       userId: userId,
     };
     

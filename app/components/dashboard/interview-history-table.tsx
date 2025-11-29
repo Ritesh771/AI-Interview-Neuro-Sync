@@ -12,7 +12,7 @@ export type InterviewHistoryType = {
   name: string;
   createdAt: Date;
   role: string;
-  type: string;
+  interviewType: string;
   difficultyLevel: string;
   feedBack: string | null;
   totalScore?: number | null;
@@ -24,8 +24,8 @@ export const interviewHistoryData: InterviewHistoryType[] = [
     name: 'Frontend Developer Interview',
     createdAt: new Date('2025-08-01T10:30:00'),
     role: 'Frontend Developer',
-    type: 'AI',
     difficultyLevel: 'Medium',
+    interviewType: 'Live Voice Interview',
     feedBack: 'Good understanding of React basics, but needs improvement in performance optimization.',
     totalScore: 75
   },
@@ -34,8 +34,8 @@ export const interviewHistoryData: InterviewHistoryType[] = [
     name: 'Backend Developer Practice',
     createdAt: new Date('2025-08-02T15:00:00'),
     role: 'Backend Developer',
-    type: 'Practice',
     difficultyLevel: 'Hard',
+    interviewType: 'Live Voice Interview',
     feedBack: 'Excellent API design skills, but database query optimization can be improved.',
     totalScore: 82
   },
@@ -44,8 +44,8 @@ export const interviewHistoryData: InterviewHistoryType[] = [
     name: 'Fullstack Developer Interview',
     createdAt: new Date('2025-08-03T09:15:00'),
     role: 'Fullstack Developer',
-    type: 'AI',
     difficultyLevel: 'Easy',
+    interviewType: 'Live Voice Interview',
     feedBack: 'Strong problem-solving, but struggled with advanced CSS layouts.',
     totalScore: 68
   },
@@ -54,8 +54,8 @@ export const interviewHistoryData: InterviewHistoryType[] = [
     name: 'Data Analyst Practice',
     createdAt: new Date('2025-08-04T14:45:00'),
     role: 'Data Analyst',
-    type: 'Practice',
     difficultyLevel: 'Medium',
+    interviewType: 'Live Voice Interview',
     feedBack: 'Good data visualization skills, minor issues with SQL joins.',
     totalScore: 79
   },
@@ -64,8 +64,8 @@ export const interviewHistoryData: InterviewHistoryType[] = [
     name: 'Machine Learning Engineer Interview',
     createdAt: new Date('2025-08-05T11:20:00'),
     role: 'Machine Learning Engineer',
-    type: 'AI',
     difficultyLevel: 'Hard',
+    interviewType: 'Live Voice Interview',
     feedBack: 'Great model selection, but needs better explanation of hyperparameter tuning.',
     totalScore: 85
   },
@@ -74,8 +74,8 @@ export const interviewHistoryData: InterviewHistoryType[] = [
     name: 'DevOps Engineer Practice',
     createdAt: new Date('2025-08-06T13:50:00'),
     role: 'DevOps Engineer',
-    type: 'Practice',
     difficultyLevel: 'Medium',
+    interviewType: 'Live Voice Interview',
     feedBack: 'Solid CI/CD pipeline setup, could improve Kubernetes troubleshooting speed.',
     totalScore: 73
   },
@@ -84,8 +84,8 @@ export const interviewHistoryData: InterviewHistoryType[] = [
     name: 'UI/UX Designer Interview',
     createdAt: new Date('2025-08-07T10:10:00'),
     role: 'UI/UX Designer',
-    type: 'AI',
     difficultyLevel: 'Easy',
+    interviewType: 'Live Voice Interview',
     feedBack: 'Creative designs but needs more focus on accessibility best practices.',
     totalScore: 71
   },
@@ -94,8 +94,8 @@ export const interviewHistoryData: InterviewHistoryType[] = [
     name: 'Cybersecurity Analyst Practice',
     createdAt: new Date('2025-08-07T16:40:00'),
     role: 'Cybersecurity Analyst',
-    type: 'Practice',
     difficultyLevel: 'Hard',
+    interviewType: 'Live Voice Interview',
     feedBack: 'Good knowledge of OWASP Top 10, but incident response strategy was lacking.',
     totalScore: 77
   },
@@ -104,8 +104,8 @@ export const interviewHistoryData: InterviewHistoryType[] = [
     name: 'Cloud Architect Interview',
     createdAt: new Date('2025-08-08T12:00:00'),
     role: 'Cloud Architect',
-    type: 'AI',
     difficultyLevel: 'Medium',
+    interviewType: 'Live Voice Interview',
     feedBack: 'Strong AWS architecture skills, but Azure services understanding is limited.',
     totalScore: 80
   },
@@ -114,8 +114,8 @@ export const interviewHistoryData: InterviewHistoryType[] = [
     name: 'Mobile App Developer Practice',
     createdAt: new Date('2025-08-09T09:50:00'),
     role: 'Mobile App Developer',
-    type: 'Practice',
     difficultyLevel: 'Easy',
+    interviewType: 'Live Voice Interview',
     feedBack: 'Good Flutter skills, but state management could be improved for scalability.',
     totalScore: 74
   },
@@ -198,14 +198,14 @@ export const columns: ColumnDef<InterviewHistoryType>[] = [
 
   },
   {
-    accessorKey: "type",
+    accessorKey: "interviewType",
     header: ({ column }) => {
       return (
-        "Type"
+        "Interview Type"
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("type")}</div>,
-    size: 100
+    cell: ({ row }) => <div className="lowercase">{row.getValue("interviewType")}</div>,
+    size: 120
 
   },
   {

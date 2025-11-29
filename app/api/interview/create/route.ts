@@ -13,6 +13,7 @@ export async function POST(req: Request) {
     experience,
     noOfQuestions,
     userId,
+    interviewType,
   } = await req.json();
 
   try {
@@ -72,6 +73,7 @@ export async function POST(req: Request) {
       difficultyLevel,
       noOfQuestions,
       userId,
+      interviewType,
       isCompleted: false,
       questions,
     });

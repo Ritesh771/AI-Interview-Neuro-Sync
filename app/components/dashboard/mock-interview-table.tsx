@@ -33,8 +33,8 @@ export type MockInterviewType = {
     isCompleted: boolean | null;
     createdAt: string; // ISO string from API
     role: string;
-    type: string;
     difficultyLevel: string;
+    interviewType: string;
 };
 
 
@@ -121,14 +121,14 @@ export const columns: ColumnDef<MockInterviewType>[] = [
 
     },
     {
-        accessorKey: "type",
+        accessorKey: "interviewType",
         header: ({ column }) => {
             return (
-                "Type"
+                "Interview Type"
             )
         },
-        cell: ({ row }) => <div className="lowercase">{row.getValue("type")}</div>,
-        size: 100
+        cell: ({ row }) => <div className="lowercase">{row.getValue("interviewType")}</div>,
+        size: 120
 
     },
     {
