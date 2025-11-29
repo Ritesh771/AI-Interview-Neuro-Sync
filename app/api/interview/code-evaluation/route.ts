@@ -76,7 +76,14 @@ IMPORTANT:
     let evaluation: CodeEvaluation;
     try {
       // Remove any markdown formatting if present
-      const cleanText = evaluationText.replace(/```json\s*|\s*```/g, '').trim();
+      let cleanText = evaluationText.replace(/```json\s*|\s*```/g, '').trim();
+      
+      // Try to find JSON object if there's extra text
+      const jsonMatch = cleanText.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        cleanText = jsonMatch[0];
+      }
+      
       evaluation = JSON.parse(cleanText);
     } catch (parseError) {
       console.error("Error parsing code evaluation:", parseError);

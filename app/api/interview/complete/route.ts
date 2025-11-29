@@ -93,7 +93,15 @@ export async function POST(req: NextRequest) {
       
       // Clean and parse the AI response
       try {
-        const cleanedText = text.replace(/^```json\n|```$/g, "").trim();
+        // Remove any markdown formatting if present
+        let cleanedText = text.replace(/^```json\s*|\s*```$/g, "").trim();
+        
+        // Try to find JSON object if there's extra text
+        const jsonMatch = cleanedText.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          cleanedText = jsonMatch[0];
+        }
+        
         feedbackObject = JSON.parse(cleanedText);
       } catch (parseError) {
         console.error("Failed to parse AI response as JSON:", text);
@@ -136,6 +144,27 @@ export async function POST(req: NextRequest) {
       await updateInterview(data.id, { isCompleted: true });
 
       return NextResponse.json({ status: 200 });
+    } else {
+      // Handle case when feedback is empty or invalid
+      console.warn("Empty or invalid feedback received, marking interview as completed without feedback");
+      
+      // Still mark the interview as completed, but with default feedback
+      const defaultFeedback = {
+        interviewId: data.id,
+        userId: data.userid,
+        feedBack: "Interview completed. Due to technical issues, detailed feedback could not be generated at this time.",
+        problemSolving: 70,
+        systemDesign: 70,
+        communicationSkills: 70,
+        technicalAccuracy: 70,
+        behavioralResponses: 70,
+        timeManagement: 70,
+      };
+
+      await createInterviewFeedback(defaultFeedback);
+      await updateInterview(data.id, { isCompleted: true });
+
+      return NextResponse.json({ status: 200, message: "Interview completed with default feedback" });
     }
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });

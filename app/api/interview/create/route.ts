@@ -46,9 +46,16 @@ export async function POST(req: Request) {
             Thank you! <3`,
       });
 
-      questions = JSON.parse(
-        GeneratedQuestions.replace(/^```json\n|```$/g, "").trim()
-      ) as string[];
+      // Clean and parse the generated questions
+      let cleanQuestionsText = GeneratedQuestions.replace(/^```json\n|```$/g, "").trim();
+      
+      // Try to find JSON array if there's extra text
+      const jsonMatch = cleanQuestionsText.match(/\[[\s\S]*\]/);
+      if (jsonMatch) {
+        cleanQuestionsText = jsonMatch[0];
+      }
+      
+      questions = JSON.parse(cleanQuestionsText) as string[];
     } catch (apiError: any) {
       console.error("Gemini API quota exceeded for voice interview, using fallback questions:", apiError.message);
       

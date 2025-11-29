@@ -74,13 +74,19 @@ export async function POST(req: NextRequest) {
         Focus: ${type} questions
         Tech Stack: ${techStackArray.join(", ")}
         
-        Each question should include:
-        1. A unique ID
+        ${type === 'aptitude' ? 
+          'IMPORTANT: Generate ONLY aptitude-type questions in multiple choice format.' :
+          'Each question should include:'
+        }
+        ${type === 'aptitude' ? 
+          '' :
+          `1. A unique ID
         2. The question text
         3. Question type (technical, behavioral, system-design, or aptitude)
         4. Difficulty level (Easy, Medium, Hard)
         5. Category (e.g., JavaScript, React, Algorithms, etc.)
-        6. Optional hints (2-3 hints if appropriate)
+        6. Optional hints (2-3 hints if appropriate)`
+        }
         
         FOR APTITUDE QUESTIONS (multiple choice format):
         - Include "options" array with 4 choices (A, B, C, D)
@@ -89,7 +95,17 @@ export async function POST(req: NextRequest) {
         
         Return ONLY a valid JSON array of question objects with the following structure:
         [
-          {
+          ${type === 'aptitude' ? 
+            `{
+            "id": "1",
+            "question": "What is the time complexity of binary search?",
+            "type": "aptitude",
+            "difficulty": "Easy",
+            "category": "Algorithms",
+            "options": ["O(n)", "O(log n)", "O(n²)", "O(1)"],
+            "correctAnswer": "B"
+          }` :
+            `{
             "id": "1",
             "question": "Explain the concept of closures in JavaScript",
             "type": "technical",
@@ -105,6 +121,7 @@ export async function POST(req: NextRequest) {
             "category": "Algorithms",
             "options": ["O(n)", "O(log n)", "O(n²)", "O(1)"],
             "correctAnswer": "B"
+          }`
           }
         ]
         
@@ -114,7 +131,10 @@ export async function POST(req: NextRequest) {
         - Make questions appropriate for the experience level and role
         - Do not include markdown or any other formatting
         - Make sure each question has a unique ID
-        - For aptitude questions, ALWAYS include options and correctAnswer
+        ${type === 'aptitude' ? 
+          '- ALL questions must be aptitude type with options and correctAnswer' :
+          '- For aptitude questions, ALWAYS include options and correctAnswer'
+        }
         - For behavioral questions, focus on situational and experience-based questions
         - For system design questions, focus on architecture and scalability concepts
         `,
@@ -123,7 +143,14 @@ export async function POST(req: NextRequest) {
       // Clean up the response and parse the generated questions
       try {
         // Remove any markdown formatting if present
-        const cleanText = generatedQuestions.replace(/```json\s*|\s*```/g, '').trim();
+        let cleanText = generatedQuestions.replace(/```json\s*|\s*```/g, '').trim();
+        
+        // Try to find JSON array if there's extra text
+        const jsonMatch = cleanText.match(/\[[\s\S]*\]/);
+        if (jsonMatch) {
+          cleanText = jsonMatch[0];
+        }
+        
         questions = JSON.parse(cleanText);
       } catch (parseError) {
         console.error("Error parsing generated questions:", parseError);
@@ -263,7 +290,14 @@ export async function PUT(req: NextRequest) {
         // Clean up the response and parse the evaluation
         try {
           // Remove any markdown formatting if present
-          const cleanText = evaluationText.replace(/```json\s*|\s*```/g, '').trim();
+          let cleanText = evaluationText.replace(/```json\s*|\s*```/g, '').trim();
+          
+          // Try to find JSON object if there's extra text
+          const jsonMatch = cleanText.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            cleanText = jsonMatch[0];
+          }
+          
           evaluation = JSON.parse(cleanText);
         } catch (parseError) {
           console.error("Error parsing evaluation:", parseError);

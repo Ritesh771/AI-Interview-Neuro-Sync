@@ -40,14 +40,18 @@ export async function GET(req: NextRequest) {
         createdAt: createdAt.toISOString(), // Convert to ISO string for proper serialization
         feedBack: interview.feedBack?.feedBack || null,
         totalScore: interview.feedBack ? 
-          Math.round((
-            interview.feedBack.problemSolving +
-            interview.feedBack.systemDesign +
-            interview.feedBack.communicationSkills +
-            interview.feedBack.technicalAccuracy +
-            interview.feedBack.behavioralResponses +
-            interview.feedBack.timeManagement
-          ) / 6) : null
+          // For aptitude rounds, use problemSolving score directly
+          // For other rounds, use average of all metrics
+          interview.type === 'gemini-aptitude' || interview.type?.startsWith('gemini-') ?
+            interview.feedBack.problemSolving :
+            Math.round((
+              interview.feedBack.problemSolving +
+              interview.feedBack.systemDesign +
+              interview.feedBack.communicationSkills +
+              interview.feedBack.technicalAccuracy +
+              interview.feedBack.behavioralResponses +
+              interview.feedBack.timeManagement
+            ) / 6) : null
       };
     });
 
