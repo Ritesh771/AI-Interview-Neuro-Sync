@@ -1,11 +1,11 @@
 import { auth } from "@/app/(auth-pages)/auth";
 import { SavedMessage } from "@/app/components/interview/interview-body";
-import { prisma } from "@/prisma/prisma";
+import { createInterviewFeedback, updateInterview } from "@/lib/firebase-data";
 import { google } from "@ai-sdk/google";
 import { generateText } from "ai";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   const data = await req.json();
 
   const conversation = (data.conservation as SavedMessage[])
@@ -46,10 +46,29 @@ export async function POST(req: NextRequest, res: NextResponse) {
               If the interview is invalid, return exactly: {}
 `,
     });
-    const feedbackObject = JSON.parse(
-      text.replace(/^```json\n|```$/g, "").trim()
-    );
-    if (feedbackObject && feedbackObject.feedbackObject.trim() != "") {
+    
+    // Clean and parse the AI response
+    let feedbackObject;
+    try {
+      const cleanedText = text.replace(/^```json\n|```$/g, "").trim();
+      feedbackObject = JSON.parse(cleanedText);
+    } catch (parseError) {
+      console.error("Failed to parse AI response as JSON:", text);
+      console.error("Parse error:", parseError);
+      // Return early if we can't parse the response
+      return NextResponse.json({ error: "Failed to parse AI feedback response" }, { status: 500 });
+    }
+    
+    if (feedbackObject && feedbackObject.feedbackObject && feedbackObject.feedbackObject.trim() != "") {
+      // Validate that all required properties exist
+      const requiredProps = ['ProblemSolving', 'SystemDesign', 'CommunicationSkills', 'TechnicalAccuracy', 'BehavioralResponses', 'TimeManagement'];
+      const hasAllProps = requiredProps.every(prop => typeof feedbackObject[prop] === 'number' && feedbackObject[prop] >= 1 && feedbackObject[prop] <= 100);
+      
+      if (!hasAllProps) {
+        console.error("Invalid feedback object structure:", feedbackObject);
+        return NextResponse.json({ error: "Invalid feedback data structure" }, { status: 500 });
+      }
+
       const feedBackData = {
         interviewId: data.id,
         userId: data.userid,
@@ -62,28 +81,14 @@ export async function POST(req: NextRequest, res: NextResponse) {
         timeManagement: feedbackObject.TimeManagement,
       };
 
-      await prisma.interviewFeedback.create({
-        data: {
-          ...feedBackData,
-        },
-      });
+      await createInterviewFeedback(feedBackData);
 
-      let interviewUpdateData = await prisma.interview.findUnique({
-        where: { id: data.id },
-      });
+      // Update the interview status to completed
+      await updateInterview(data.id, { isCompleted: true });
 
-      if (interviewUpdateData) {
-        await prisma.interview.update({
-          where: { id: data.id },
-          data: {
-            isCompleted: true,
-          },
-        });
-      }
-
-      return Response.json({ status: 200 });
+      return NextResponse.json({ status: 200 });
     }
   } catch (error) {
-    return Response.json({ error }, { status: 500 });
+    return NextResponse.json({ error }, { status: 500 });
   }
 }

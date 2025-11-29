@@ -1,21 +1,17 @@
 import { auth } from "@/app/(auth-pages)/auth";
-import { prisma } from "@/prisma/prisma";
+import { getInterviewById } from "@/lib/firebase-data";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
-  const interviewID = (await params)?.id;
+  const { id: interviewID } = await context.params;
   if (!interviewID) {
     return NextResponse.json({ error: "Missing interviewID" }, { status: 400 });
   }
   try {
-    const interviews = await prisma.interview.findUnique({
-      where: {
-        id: interviewID,
-      },
-    });
+    const interviews = await getInterviewById(interviewID);
     return NextResponse.json(interviews);
   } catch (error) {
     return NextResponse.json(
