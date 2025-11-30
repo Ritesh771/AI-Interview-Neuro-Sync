@@ -19,10 +19,7 @@ A modern AI-powered interview platform that simulates real job interviews using 
 
 Live Demo. play the demo video there
 
-<video width="640" height="360" controls>
-  <source src="https://github.com/Ritesh771/Rooman-AI-Interview/raw/main/public/demo-video.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+[Video Demo](https://drive.google.com/file/d/1Tm2rxqgJbbHoN04KDznle4b8NySN9p9I/view?usp=sharing)
 
 ## Tech Stack
 
