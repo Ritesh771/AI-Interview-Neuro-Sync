@@ -17,7 +17,12 @@ A modern AI-powered interview platform that simulates real job interviews using 
 
 ## Demo Link
 
-[Live Demo](https://mockai-six.vercel.app/) 
+Live Demo. play the demo video there
+
+<video width="640" height="360" controls>
+  <source src="./demo-video.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
 ## Tech Stack
 
