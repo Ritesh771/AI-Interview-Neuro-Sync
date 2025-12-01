@@ -1,7 +1,7 @@
 "use client";
 import { handleCompleteInterviewAction } from "@/app/lib/form-actions";
-import { vapi } from "@/lib/vapi.sdk";
-import { CreateAssistantDTO } from "@vapi-ai/web/dist/api";
+import { useLiveSession } from "@/hooks/useLiveSession";
+import { ConnectionState } from "@/lib/types";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -17,64 +17,6 @@ type CompleteInterviewType = {
     id: string,
     conversation: SavedMessage[];
     userid: string | undefined;
-}
-
-export const interviewer: CreateAssistantDTO = {
-    name: "Interviewer",
-    firstMessage:
-        "Hello! Thank you for taking the time to speak with me today. I'm excited to learn more about you and your experience.",
-    transcriber: {
-        provider: "deepgram",
-        model: "nova-2",
-        language: "en",
-    },
-    voice: {
-        provider: "11labs",
-        voiceId: "sarah",
-        stability: 0.4,
-        similarityBoost: 0.8,
-        speed: 0.9,
-        style: 0.5,
-        useSpeakerBoost: true,
-    },
-    model: {
-        provider: "openai",
-        model: "gpt-4",
-        messages: [
-            {
-                role: "system",
-                content: `You are a professional job interviewer conducting a real-time voice interview with a candidate. Your goal is to assess their qualifications, motivation, and fit for the role.
-  
-                Interview Guidelines:
-                Follow the structured question flow:
-                {{questions}}
-
-                Engage naturally & react appropriately:
-                Listen actively to responses and acknowledge them before moving forward.
-                Ask brief follow-up questions if a response is vague or requires more detail.
-                Keep the conversation flowing smoothly while maintaining control.
-                Be professional, yet warm and welcoming:
-
-                Use official yet friendly language.
-                Keep responses concise and to the point (like in a real voice interview).
-                Avoid robotic phrasing—sound natural and conversational.
-                Answer the candidate’s questions professionally:
-
-                If asked about the role, company, or expectations, provide a clear and relevant answer.
-                If unsure, redirect the candidate to HR for more details.
-
-                Conclude the interview properly:
-                Thank the candidate for their time.
-                Inform them that the company will reach out soon with feedback.
-                End the conversation on a polite and positive note.
-
-
-                - Be sure to be professional and polite.
-                - Keep all your responses short and simple. Use official language, but be kind and welcoming.
-                - This is a voice conversation, so keep your responses short, like in a real conversation. Don't ramble for too long.`,
-                          },
-        ],
-    },
 };
 
 type InterviewBodyprops = {
@@ -91,9 +33,8 @@ const InterviewBody = ({ id, questions, startInterview, handleLastMessageChange,
 
     const session = useSession();
     const router = useRouter();
+    const { connect, disconnect, connectionState, error, volume } = useLiveSession();
 
-    const [callStart, setCallStart] = React.useState(false);
-    const [isSpeaking, setIsSpeaking] = React.useState(false);
     const [savedMessage, setsavedMessage] = React.useState<SavedMessage[]>([]);
     const [isCompleting, setIsCompleting] = React.useState(false);
 
@@ -120,75 +61,43 @@ const InterviewBody = ({ id, questions, startInterview, handleLastMessageChange,
     }, [savedMessage, id, session.data?.user?.id])
 
     useEffect(() => {
-        setCallStart(false);
-        setsavedMessage([]);
+        if (startInterview) {
+            const systemInstruction = `You are a professional job interviewer conducting a real-time voice interview with a candidate. Your goal is to assess their qualifications, motivation, and fit for the role.
 
-        const onMessage = (message: any) => {
-            if (message.type === "transcript" && message.transcriptType === "final") {
-                const newMessage = { role: message.role, content: message.transcript };
-                setsavedMessage((prev) => [...prev, newMessage]);
-            }
-        };
+Interview Guidelines:
+Follow the structured question flow:
+${questions}
 
-        const onSpeechStart = () => setIsSpeaking(true);
-        const onSpeechEnd = () => setIsSpeaking(false);
+Engage naturally & react appropriately:
+Listen actively to responses and acknowledge them before moving forward.
+Ask brief follow-up questions if a response is vague or requires more detail.
+Keep the conversation flowing smoothly while maintaining control.
+Be professional, yet warm and welcoming:
 
-        const onCallStart = () => setCallStart(true);
-        const onCallEnd = () => setCallStart(false);
+Use official yet friendly language.
+Keep responses concise and to the point (like in a real voice interview).
+Avoid robotic phrasing—sound natural and conversational.
 
-        vapi.on('message', onMessage);
-        vapi.on('speech-start', onSpeechStart);
-        vapi.on('speech-end', onSpeechEnd);
-        vapi.on('call-start', onCallStart);
-        vapi.on('call-end', onCallEnd);
+- Be sure to be professional and polite.
+- Keep all your responses short and simple. Use official language, but be kind and welcoming.
+- This is a voice conversation, so keep your responses short, like in a real conversation. Don't ramble for too long.`;
 
-        return () => {
-            vapi.off('message', onMessage);
-            vapi.off('speech-start', onSpeechStart);
-            vapi.off('speech-end', onSpeechEnd);
-            vapi.off('call-start', onCallStart);
-            vapi.off('call-end', onCallEnd);
+            connect(systemInstruction);
         }
-    }, [])
-
-    useEffect(() => {
-        if (savedMessage.length > 0) {
-            const last = savedMessage[savedMessage.length - 1];
-            if (last?.content) {
-                handleLastMessageChange(last.content);
-            }
-        }
-    }, [savedMessage]);
+    }, [startInterview, questions, connect])
 
     useEffect(() => {
         if (isHangingUp) {
-            handleCallStop();
+            disconnect();
             handlehangUp();
         }
-    }, [isHangingUp])
+    }, [isHangingUp, disconnect, handlehangUp])
 
     useEffect(() => {
         if (isHangingUp && !isCompleting) {
             router.push("/dashboard");
         }
     }, [isHangingUp, isCompleting, router])
-
-    useEffect(() => {
-        if (startInterview) handleCallConnect();
-    }, [startInterview])
-
-    const handleCallConnect = async () => {
-        await vapi.start(interviewer, {
-            variableValues: {
-                questions: questions,
-            }
-        });
-    }
-
-    const handleCallStop = () => {
-        setCallStart(false);
-        vapi.stop();
-    }
 
     return (
         <section className="flex items-center justify-center gap-6 z-60">
@@ -205,7 +114,7 @@ const InterviewBody = ({ id, questions, startInterview, handleLastMessageChange,
             <div className="flex flex-col items-center justify-center h-[400px] w-full max-w-xl p-6 border-2 border-black rounded-[45px] bg-[#e7e9fb] shadow-md ">
                 <div className="relative w-60 h-60 flex items-center justify-center">
                     {
-                        isSpeaking &&
+                        volume > 10 &&
                         <div className="absolute w-28 h-28 bg-[#f78c74]/45 rounded-full animate-ping z-10" />
                     }
                     <Image

@@ -83,11 +83,8 @@ This project now uses Firebase as the sole database backend, replacing SQLite/Pr
    FIREBASE_CLIENT_EMAIL=your_firebase_client_email
    FIREBASE_PRIVATE_KEY=your_firebase_private_key
 
-   # VAPI Configuration (for voice features)
-   NEXT_PUBLIC_VAPI_TOKEN=your_vapi_api_key
-
-   # Google Gemini Configuration
-   GOOGLE_GEMINI_API_KEY=your_gemini_api_key
+   # Google Gemini Configuration (for voice features)
+   NEXT_PUBLIC_GEMINI_API_KEY=your_gemini_api_key
 
    # Base URL (optional, for production)
    NEXT_PUBLIC_BASE_URL=http://localhost:3000
@@ -150,7 +147,7 @@ graph TB
     A[User] --> B[Next.js Frontend]
     B --> C[Firebase Auth]
     B --> D[Firestore Database]
-    B --> E[VAPI Voice Assistant]
+    B --> E[Gemini Voice Assistant]
     B --> F[Google Gemini AI]
     B --> G[Code Platform]
 

@@ -40,21 +40,25 @@ export async function handleCreateInterviewFormAction(
     
     await CreateInterviewSchema.parseAsync(data);
 
-    // Check if this is a coding interview
-    const interviewType = formData.get("interviewType") || "Live Voice Interview";
+    // Check the interview type
+    const interviewType = (formData.get("interviewType") as string) || "Live Voice Interview";
     const isCodingInterview = interviewType === "Coding Round";
-    const isGeminiInterview = interviewType === "Aptitude Round";
+    const isAptitude = interviewType === "Aptitude Round";
+    // Map Live Voice Interview to be processed by the Gemini server endpoint
+    const shouldUseGeminiEndpoint = isAptitude || interviewType === "Live Voice Interview";
     
     console.log("Form data received:", {
       interviewType,
       type: formData.get("type"),
-      isGeminiInterview
+      isAptitude,
+      shouldUseGeminiEndpoint
     });
     
-    // For Gemini interviews (aptitude rounds), override the type to "aptitude"
+    // For Aptitude interviews, keep type as 'aptitude'. For Live Voice interviews routed to Gemini
+    // we keep the original `type` (Technical/Behavioral/...), but use Gemini endpoint for generation
     const interviewData = {
       ...data,
-      type: isGeminiInterview ? "aptitude" : data.type,
+      type: isAptitude ? "aptitude" : data.type,
     };
     
     console.log("Final interview data:", interviewData);
@@ -63,7 +67,7 @@ export async function handleCreateInterviewFormAction(
     let apiUrl;
     if (isCodingInterview) {
       apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/interview/create-coding`;
-    } else if (isGeminiInterview) {
+    } else if (shouldUseGeminiEndpoint) {
       apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/interview/gemini`;
     } else {
       apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/interview/create`;

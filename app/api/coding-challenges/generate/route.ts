@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     } = await req.json();
 
     // Generate coding challenges using Google Gemini
-    let challenges: CodingChallenge[];
+    let challenges: CodingChallenge[] = [];
     
     try {
       const { text: generatedChallenges } = await generateText({
@@ -89,7 +89,6 @@ export async function POST(req: NextRequest) {
     });
 
     // Clean up the response and parse the generated challenges
-    let challenges: CodingChallenge[];
     try {
       // Remove any markdown formatting if present
       const cleanText = generatedChallenges.replace(/```json\s*|\s*```/g, '').trim();
@@ -212,7 +211,7 @@ function generateFallbackCodingChallenges(
   // Generate the requested number of challenges
   for (let i = 0; i < numberOfQuestions; i++) {
     const challengeIndex = i % availableChallenges.length;
-    const challenge = { ...availableChallenges[challengeIndex] };
+    const challenge = { ...availableChallenges[challengeIndex] } as CodingChallenge;
     challenge.id = (i + 1).toString();
     challenges.push(challenge);
   }

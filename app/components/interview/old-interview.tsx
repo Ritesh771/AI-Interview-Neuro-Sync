@@ -3,7 +3,6 @@
 import React, { useEffect } from 'react'
 import InterviewCard from './interview-card'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '../ui/carousel'
-import { vapi } from "@/lib/vapi.sdk";
 
 
 const PastInterviewLayout = () => {

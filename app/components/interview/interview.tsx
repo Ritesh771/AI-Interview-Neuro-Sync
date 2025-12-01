@@ -3,7 +3,8 @@
 import React, {useEffect} from 'react';
 import Image from "next/image";
 import {Button} from "@/app/components/ui/button";
-import {vapi} from "@/lib/vapi.sdk";
+import { useLiveSession } from "@/hooks/useLiveSession";
+import { ConnectionState } from "@/lib/types";
 
 
 interface SavedMessage {
@@ -12,53 +13,59 @@ interface SavedMessage {
 }
 
 const Interview = () => {
-    const [callStart, setCallStart] = React.useState(false);
-    const [isSpeaking, setIsSpeaking] = React.useState(false);
+    const { connect, disconnect, connectionState, error, volume } = useLiveSession();
     const [savedMessage, setsavedMessage] = React.useState<SavedMessage[]>([]);
     const [lastMessage, setLastMessage] = React.useState("");
 
     useEffect(() => {
-        setCallStart(false);
-        setsavedMessage([]);
+        // For now, we'll use a simple system instruction
+        // In a real implementation, you'd fetch questions from your API
+        const systemInstruction = `You are a professional job interviewer conducting a real-time voice interview with a candidate. Your goal is to assess their qualifications, motivation, and fit for the role.
 
-        const onMessage = (message: any) => {
-            if (message.type === "transcript" && message.transcriptType === "final") {
-                const newMessage = {role: message.role, content: message.transcript};
-                setsavedMessage((prev) => [...prev, newMessage]);
-            }
-        };
+Interview Guidelines:
+Follow a structured question flow based on the job requirements.
+Engage naturally & react appropriately:
+Listen actively to responses and acknowledge them before moving forward.
+Ask brief follow-up questions if a response is vague or requires more detail.
+Keep the conversation flowing smoothly while maintaining control.
+Be professional, yet warm and welcoming:
 
-        const onSpeechStart = () => setIsSpeaking(true);
-        const onSpeechEnd = () => setIsSpeaking(false);
+Use official yet friendly language.
+Keep responses concise and to the point (like in a real voice interview).
+Avoid robotic phrasing—sound natural and conversational.
 
-        const onCallStart = () => setCallStart(true);
-        const onCallEnd = () => setCallStart(false);
+- Be sure to be professional and polite.
+- Keep all your responses short and simple. Use official language, but be kind and welcoming.
+- This is a voice conversation, so keep your responses short, like in a real conversation. Don't ramble for too long.`;
 
-        vapi.on('message', onMessage);
-        vapi.on('speech-start', onSpeechStart);
-        vapi.on('speech-end', onSpeechEnd);
-        vapi.on('call-start', onCallStart);
-        vapi.on('call-end', onCallEnd);
-
-        return () => {
-            vapi.off('message', onMessage);
-            vapi.off('speech-start', onSpeechStart);
-            vapi.off('speech-end', onSpeechEnd);
-            vapi.off('call-start', onCallStart);
-            vapi.off('call-end', onCallEnd);
-        }
-    }, [])
+        // Note: In a full implementation, you'd connect when starting the interview
+        // connect(systemInstruction);
+    }, []);
 
     const handleCallConnect = async () => {
-        if (!process.env.NEXT_PUBLIC_VAPI_ASSISTANT_WORKFLOW_ID)
-            console.error('no workflow id found');
-    
-        await vapi.start(process.env.NEXT_PUBLIC_VAPI_ASSISTANT_WORKFLOW_ID);
+        const systemInstruction = `You are a professional job interviewer conducting a real-time voice interview with a candidate. Your goal is to assess their qualifications, motivation, and fit for the role.
+
+Interview Guidelines:
+Follow a structured question flow based on the job requirements.
+Engage naturally & react appropriately:
+Listen actively to responses and acknowledge them before moving forward.
+Ask brief follow-up questions if a response is vague or requires more detail.
+Keep the conversation flowing smoothly while maintaining control.
+Be professional, yet warm and welcoming:
+
+Use official yet friendly language.
+Keep responses concise and to the point (like in a real voice interview).
+Avoid robotic phrasing—sound natural and conversational.
+
+- Be sure to be professional and polite.
+- Keep all your responses short and simple. Use official language, but be kind and welcoming.
+- This is a voice conversation, so keep your responses short, like in a real conversation. Don't ramble for too long.`;
+
+        await connect(systemInstruction);
     }
 
     const handleCallStop = () => {
-        setCallStart(false);
-        vapi.stop();
+        disconnect();
     }
 
     useEffect(() => {
@@ -76,7 +83,7 @@ const Interview = () => {
                     className="flex-col gap-y-1 flex items-center justify-center h-[320px] border-2 border-[#CAC5FE] rounded-2xl w-full  md:w-1/2 bg-gradient-to-b from-[#181537] to-[#0C0B16]">
                     <div className="relative flex flex-col items-center justify-center">
                         {
-                            isSpeaking &&
+                            volume > 10 &&
                             <>
                                 <div
                                     className="absolute w-[120px] h-[120px] bg-[#CAC5FE] bg-opacity-45 rounded-full animate-ping"></div>
@@ -115,20 +122,20 @@ const Interview = () => {
             <section
                 className=" rounded-full flex-col flex item-center justify-center gap-4 border-2px border-[#4B4D4F66]">
                 {
-                    callStart &&
+                    connectionState === ConnectionState.CONNECTED &&
                     <span
                         className="bg-gradient-to-b from-[#1A1C20] to-[#08090D] text-center p-4 text-lg">{lastMessage}</span>
                 }
                 <div className="flex flex-row gap-3 items-center justify-center w-full">
                     {
-                        !callStart &&
+                        connectionState !== ConnectionState.CONNECTED &&
                         <Button onClick={handleCallConnect}
                                 className="bg-[#32de84] hover:bg-[#32de84] rounded-full pb-[16px] pt-[16px] p-6  hover:opacity-60">
                             Start interview
                         </Button>
                     }
 
-                    <Button disabled={!callStart} onClick={handleCallStop}
+                    <Button disabled={connectionState !== ConnectionState.CONNECTED} onClick={handleCallStop}
                             className="bg-[#F75353] pt-[16px] pb-[16px] rounded-full p-6 hover:bg-[#F75353] hover:opacity-60">
                         Leave interview
                     </Button>
