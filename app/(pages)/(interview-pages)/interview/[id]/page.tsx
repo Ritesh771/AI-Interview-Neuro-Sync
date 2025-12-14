@@ -10,6 +10,13 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/interview/get/${interviewId}`)
   const data = await response.json();
   
+  // Check if this is a live voice interview
+  if (data && data.interviewType === 'Live Voice Interview') {
+    return (
+      <InterviewContent {...data} />
+    );
+  }
+  
   // Check if this is a coding interview by checking if it has challenges
   if (data && data.questions && typeof data.questions === 'object' && !Array.isArray(data.questions) && data.questions.challenges) {
     return (

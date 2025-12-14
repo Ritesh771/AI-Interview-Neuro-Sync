@@ -72,12 +72,16 @@ export async function POST(req: NextRequest) {
         model: google("gemini-2.0-flash-001"),
         prompt: `Generate ${noOfQuestions} interview questions for a ${role} position with ${experience} experience level and ${difficultyLevel} difficulty.
         
+        Interview Type: ${interviewType}
         Focus: ${type} questions
         Tech Stack: ${techStackArray.join(", ")}
         
-        ${type === 'aptitude' ? 
-          'IMPORTANT: Generate ONLY aptitude-type questions in multiple choice format.' :
-          'Each question should include:'
+        ${interviewType === 'Live Voice Interview' ? 
+          'IMPORTANT: Generate open-ended conversational questions suitable for live voice interaction. Do NOT generate multiple choice questions. Questions should encourage detailed verbal responses.' :
+          type === 'aptitude' ? 
+            'IMPORTANT: Generate ONLY aptitude-type questions in multiple choice format.' :
+            'Each question should include:'
+        }
         }
         ${type === 'aptitude' ? 
           '' :
