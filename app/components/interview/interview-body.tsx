@@ -33,16 +33,33 @@ const InterviewBody = ({ id, questions, startInterview, handleLastMessageChange,
 
     const session = useSession();
     const router = useRouter();
-    const { connect, disconnect, connectionState, error, volume } = useLiveSession();
+
+    const [conversation, setConversation] = React.useState<string[]>([]);
+
+    const handleMessage = (message: string, isUser: boolean) => {
+        setConversation(prev => [...prev, `${isUser ? 'You' : 'Interviewer'}: ${message}`]);
+    };
+
+    const { connect, disconnect, connectionState, error, volume } = useLiveSession(handleMessage);
 
     const [savedMessage, setsavedMessage] = React.useState<SavedMessage[]>([]);
     const [isCompleting, setIsCompleting] = React.useState(false);
 
     const handlehangUp = useCallback(async () => {
+        // Convert conversation to SavedMessage format
+        const formattedMessages: SavedMessage[] = conversation.map(msg => {
+            const [role, content] = msg.split(': ', 2);
+            return {
+                role: role === 'You' ? 'user' : 'assistant',
+                content: content || ''
+            };
+        });
+        setsavedMessage(formattedMessages);
+
         const completeInterviewData: CompleteInterviewType = {
             id: id,
             userid: session.data?.user?.id,
-            conversation: savedMessage
+            conversation: formattedMessages
         }
 
         setIsCompleting(true);
@@ -58,14 +75,19 @@ const InterviewBody = ({ id, questions, startInterview, handleLastMessageChange,
         } finally {
             setIsCompleting(false);
         }
-    }, [savedMessage, id, session.data?.user?.id])
+    }, [conversation, id, session.data?.user?.id])
 
     useEffect(() => {
         if (startInterview) {
             const systemInstruction = `You are a professional job interviewer conducting a real-time voice interview with a candidate. Your goal is to assess their qualifications, motivation, and fit for the role.
 
 Interview Guidelines:
-Follow the structured question flow:
+First, start by introducing yourself and asking about the candidate's background:
+- Greet the candidate professionally
+- Ask about their current role, experience, and career goals
+- Ask about their motivation for applying to this position
+
+Then, proceed to the structured question flow:
 ${questions}
 
 Engage naturally & react appropriately:

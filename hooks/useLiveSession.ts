@@ -8,7 +8,7 @@ const MODEL_NAME = 'gemini-2.5-flash-native-audio-preview-09-2025';
 const INPUT_SAMPLE_RATE = 16000;
 const OUTPUT_SAMPLE_RATE = 24000;
 
-export const useLiveSession = () => {
+export const useLiveSession = (onMessage?: (message: string, isUser: boolean) => void) => {
   const [connectionState, setConnectionState] = useState<ConnectionState>(ConnectionState.DISCONNECTED);
   const [error, setError] = useState<string | null>(null);
   const [volume, setVolume] = useState<number>(0);
@@ -105,6 +105,24 @@ export const useLiveSession = () => {
       const source = inputCtx.createMediaStreamSource(stream);
       inputSourceRef.current = source;
 
+      // Speech Recognition for User Text
+      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US';
+
+        recognition.onresult = (event: any) => {
+          const transcript = event.results[event.results.length - 1][0].transcript;
+          if (onMessage) {
+            onMessage(transcript, true); // true for user message
+          }
+        };
+
+        recognition.start();
+      }
+
       // Input Analyser (Visualizer for user voice)
       const inputAnalyser = inputCtx.createAnalyser();
       inputAnalyser.fftSize = 256;
@@ -177,6 +195,12 @@ export const useLiveSession = () => {
             scriptProcessor.connect(inputCtx.destination);
           },
           onmessage: async (message: LiveServerMessage) => {
+            // Handle Text Output
+            const textPart = message.serverContent?.modelTurn?.parts?.find(part => part.text);
+            if (textPart && textPart.text && onMessage) {
+              onMessage(textPart.text, false); // false for AI message
+            }
+
             // Handle Audio Output
             const base64Audio = message.serverContent?.modelTurn?.parts?.[0]?.inlineData?.data;
             if (base64Audio && outputAudioContextRef.current) {
