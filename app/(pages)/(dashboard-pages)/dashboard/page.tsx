@@ -5,6 +5,7 @@ import React from 'react'
 import MockInterviewTab from '@/app/components/dashboard/tabs/mock-interview'
 import InterviewHistory from '@/app/components/dashboard/tabs/interview-history'
 import CompleteProfileTab from '@/app/components/dashboard/tabs/complete-profile'
+import LearnPracticeTab from '@/app/components/dashboard/tabs/learn-practice-tab'
 
 const page = () => {
   return (
@@ -20,6 +21,9 @@ const page = () => {
       </TabsContent>
       <TabsContent value="create_interview">
         <CreateInterviewTab />
+      </TabsContent>
+      <TabsContent value="learn_practice">
+        <LearnPracticeTab />
       </TabsContent>
       <TabsContent value="interview_history">
         <InterviewHistory />

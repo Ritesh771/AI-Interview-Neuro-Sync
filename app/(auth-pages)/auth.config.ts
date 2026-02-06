@@ -35,6 +35,7 @@ export default {
     Google({
       clientId: process.env.AUTH_GOOGLE_ID!,
       clientSecret: process.env.AUTH_GOOGLE_SECRET!,
+      checks: ["state"], // Disable PKCE for development to avoid cookie parsing issues
     }),
   ],
 } satisfies NextAuthConfig;

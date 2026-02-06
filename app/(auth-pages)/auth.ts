@@ -54,6 +54,7 @@ const FirebaseAdapter = {
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
+  secret: process.env.AUTH_SECRET,
   session: { strategy: "jwt" },
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
