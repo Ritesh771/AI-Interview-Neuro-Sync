@@ -1,0 +1,193 @@
+
+> neuro-sync@0.1.0 build
+> next build
+
+   ▲ Next.js 15.2.4
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+ ⨯ ESLint: Failed to load config "next/core-web-vitals" to extend from. Referenced from: 
+   Collecting page data ...
+   Generating static pages (0/39) ...
+Error fetching problems: Error: Dynamic server usage: Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/queue /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at g (.next/server/chunks/4447.js:12:52633)
+    at <unknown> (.next/server/chunks/4447.js:1:21917)
+    at <unknown> (.next/server/chunks/4447.js:12:47143)
+    at e.with (.next/server/chunks/4447.js:1:771)
+    at e.with (.next/server/chunks/4447.js:1:1859)
+    at e.startActiveSpan (.next/server/chunks/4447.js:1:7117)
+    at e.startActiveSpan (.next/server/chunks/4447.js:12:13111)
+    at <unknown> (.next/server/chunks/4447.js:12:46651)
+    at e.with (.next/server/chunks/4447.js:1:771)
+    at e.with (.next/server/chunks/4447.js:1:1859) {
+  description: "Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/queue /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching problems: Error: Dynamic server usage: Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/stack /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at g (.next/server/chunks/4447.js:12:52633)
+    at <unknown> (.next/server/chunks/4447.js:1:21917)
+    at <unknown> (.next/server/chunks/4447.js:12:47143)
+    at e.with (.next/server/chunks/4447.js:1:771)
+    at e.with (.next/server/chunks/4447.js:1:1859)
+    at e.startActiveSpan (.next/server/chunks/4447.js:1:7117)
+    at e.startActiveSpan (.next/server/chunks/4447.js:12:13111)
+    at <unknown> (.next/server/chunks/4447.js:12:46651)
+    at e.with (.next/server/chunks/4447.js:1:771)
+    at e.with (.next/server/chunks/4447.js:1:1859) {
+  description: "Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/stack /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching problems: Error: Dynamic server usage: Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/hashing /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at g (.next/server/chunks/4447.js:12:52633)
+    at <unknown> (.next/server/chunks/4447.js:1:21917)
+    at <unknown> (.next/server/chunks/4447.js:12:47143)
+    at e.with (.next/server/chunks/4447.js:1:771)
+    at e.with (.next/server/chunks/4447.js:1:1859)
+    at e.startActiveSpan (.next/server/chunks/4447.js:1:7117)
+    at e.startActiveSpan (.next/server/chunks/4447.js:12:13111)
+    at <unknown> (.next/server/chunks/4447.js:12:46651)
+    at e.with (.next/server/chunks/4447.js:1:771)
+    at e.with (.next/server/chunks/4447.js:1:1859) {
+  description: "Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/hashing /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching problems: Error: Dynamic server usage: Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/heap /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at g (.next/server/chunks/4447.js:12:52633)
+    at <unknown> (.next/server/chunks/4447.js:1:21917)
+    at <unknown> (.next/server/chunks/4447.js:12:47143)
+    at e.with (.next/server/chunks/4447.js:1:771)
+    at e.with (.next/server/chunks/4447.js:1:1859)
+    at e.startActiveSpan (.next/server/chunks/4447.js:1:7117)
+    at e.startActiveSpan (.next/server/chunks/4447.js:12:13111)
+    at <unknown> (.next/server/chunks/4447.js:12:46651)
+    at e.with (.next/server/chunks/4447.js:1:771)
+    at e.with (.next/server/chunks/4447.js:1:1859) {
+  description: "Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/heap /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching problems: Error: Dynamic server usage: Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/trees /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at g (.next/server/chunks/4447.js:12:52633)
+    at <unknown> (.next/server/chunks/4447.js:1:21917)
+    at <unknown> (.next/server/chunks/4447.js:12:47143)
+    at e.with (.next/server/chunks/4447.js:1:771)
+    at e.with (.next/server/chunks/4447.js:1:1859)
+    at e.startActiveSpan (.next/server/chunks/4447.js:1:7117)
+    at e.startActiveSpan (.next/server/chunks/4447.js:12:13111)
+    at <unknown> (.next/server/chunks/4447.js:12:46651)
+    at e.with (.next/server/chunks/4447.js:1:771)
+    at e.with (.next/server/chunks/4447.js:1:1859) {
+  description: "Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/trees /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching problems: Error: Dynamic server usage: Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/graphs /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at g (.next/server/chunks/4447.js:12:52633)
+    at <unknown> (.next/server/chunks/4447.js:1:21917)
+    at <unknown> (.next/server/chunks/4447.js:12:47143)
+    at e.with (.next/server/chunks/4447.js:1:771)
+    at e.with (.next/server/chunks/4447.js:1:1859)
+    at e.startActiveSpan (.next/server/chunks/4447.js:1:7117)
+    at e.startActiveSpan (.next/server/chunks/4447.js:12:13111)
+    at <unknown> (.next/server/chunks/4447.js:12:46651)
+    at e.with (.next/server/chunks/4447.js:1:771)
+    at e.with (.next/server/chunks/4447.js:1:1859) {
+  description: "Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/graphs /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching problems: Error: Dynamic server usage: Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/dynamic-programming /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at g (.next/server/chunks/4447.js:12:52633)
+    at <unknown> (.next/server/chunks/4447.js:1:21917)
+    at <unknown> (.next/server/chunks/4447.js:12:47143)
+    at e.with (.next/server/chunks/4447.js:1:771)
+    at e.with (.next/server/chunks/4447.js:1:1859)
+    at e.startActiveSpan (.next/server/chunks/4447.js:1:7117)
+    at e.startActiveSpan (.next/server/chunks/4447.js:12:13111)
+    at <unknown> (.next/server/chunks/4447.js:12:46651)
+    at e.with (.next/server/chunks/4447.js:1:771)
+    at e.with (.next/server/chunks/4447.js:1:1859) {
+  description: "Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/dynamic-programming /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+   Generating static pages (9/39) 
+Error fetching problems: [Error: Dynamic server usage: Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/string /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error] {
+  description: "Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/string /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching problems: [Error: Dynamic server usage: Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/arrays /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error] {
+  description: "Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/arrays /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching problems: [Error: Dynamic server usage: Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/conditional-statements-loops /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error] {
+  description: "Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/conditional-statements-loops /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+   Generating static pages (19/39) 
+Error fetching problems: [Error: Dynamic server usage: Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/recursion /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error] {
+  description: "Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/recursion /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching problems: [Error: Dynamic server usage: Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/searching /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error] {
+  description: "Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/searching /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching problems: [Error: Dynamic server usage: Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/sorting /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error] {
+  description: "Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/sorting /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching problems: [Error: Dynamic server usage: Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/linked-list /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error] {
+  description: "Route /learn-practice/[topic] couldn't be rendered statically because it used revalidate: 0 fetch http://localhost:8000/api/learn-practice/linked-list /learn-practice/[topic]. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+   Generating static pages (29/39) 
+ ✓ Generating static pages (39/39)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                            Size  First Load JS
+┌ ƒ /                                               4.88 kB         126 kB
+├ ○ /_not-found                                       990 B         102 kB
+├ ƒ /api/auth/[...nextauth]                           197 B         101 kB
+├ ƒ /api/code-execute                                 197 B         101 kB
+├ ƒ /api/coding-challenges/generate                   197 B         101 kB
+├ ƒ /api/coding-interview/generate                    197 B         101 kB
+├ ƒ /api/interview/code-evaluation                    197 B         101 kB
+├ ƒ /api/interview/complete                           197 B         101 kB
+├ ƒ /api/interview/complete-coding                    197 B         101 kB
+├ ƒ /api/interview/create                             197 B         101 kB
+├ ƒ /api/interview/create-coding                      197 B         101 kB
+├ ƒ /api/interview/gemini                             197 B         101 kB
+├ ƒ /api/interview/get/[id]                           197 B         101 kB
+├ ƒ /api/interview/getall                             197 B         101 kB
+├ ƒ /api/leaderboard                                  197 B         101 kB
+├ ƒ /api/learn-practice/[topic]                       197 B         101 kB
+├ ƒ /api/profile/get                                  197 B         101 kB
+├ ƒ /api/profile/score                                197 B         101 kB
+├ ƒ /api/profile/structure                            197 B         101 kB
+├ ƒ /api/profile/update                               197 B         101 kB
+├ ƒ /api/user/stats                                   197 B         101 kB
+├ ƒ /coding-problem/[topic]/[id]                    8.84 kB         151 kB
+├ ƒ /dashboard                                      32.1 kB         306 kB
+├ ƒ /interview/[id]                                 57.9 kB         224 kB
+├ ƒ /interview/[id]/coding                            196 B         150 kB
+├ ƒ /interview/[id]/gemini                          1.86 kB         115 kB
+├ ● /learn-practice/[topic]                           177 B         104 kB
+├   ├ /learn-practice/conditional-statements-loops
+├   ├ /learn-practice/arrays
+├   ├ /learn-practice/string
+├   └ [+11 more paths]
+├ ○ /login                                          3.31 kB         116 kB
+├ ○ /profile                                        1.75 kB         230 kB
+└ ○ /signup                                         3.31 kB         116 kB
++ First Load JS shared by all                        101 kB
+  ├ chunks/1684-bd956f24e0cee2c9.js                 45.8 kB
+  ├ chunks/4bd1b696-8da9cc1ed84d952b.js             53.3 kB
+  └ other shared chunks (total)                        2 kB
+
+
+ƒ Middleware                                        31.6 kB
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+

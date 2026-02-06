@@ -1,20 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
 import "../../globals.css";
-import Provider from "@/app/provider";
 import { Tabs } from '@/app/components/ui/tabs'
 import NavBarContainer from "@/app/components/dashboard/navigation-bar/nav-bar-wrapper";
 import DashboardNavBar from "@/app/components/dashboard/navigation-bar/nav-bar";
 import { Suspense } from "react";
 import Loader from "@/app/components/ui/loader";
 import { Toaster } from "@/app/components/ui/sonner";
-import { useQuery } from '@tanstack/react-query';
 import Watermark from "@/app/components/ui/watermark";
-
-const spaceGrotesk = Space_Grotesk({
-    variable: "--font-geist-mono",
-    subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
     title: "Create Next App",
@@ -30,33 +22,26 @@ export default async function Layout({
 
 
     return (
-        <html lang="en" className="h-full w-full">
-            <body className="gradient h-screen w-full">
-                <div className="relative h-full w-full">
+        <div className="relative h-full w-full">
 
-                    <div className="pointer-events-none absolute right-0 top-0 h-[500px] w-[500px] -translate-x-[10%] translate-y-[20%] bg-[#898da5] brightness-200 rounded-full opacity-50 blur-[80px]" />
-                    <div className="pointer-events-none absolute right-0 top-0 h-[500px] w-[500px] -translate-x-[220%] translate-y-[30%] bg-[#5a5f7a] brightness-200 rounded-full opacity-50 blur-[80px]" />
+            <div className="pointer-events-none absolute right-0 top-0 h-[500px] w-[500px] -translate-x-[10%] translate-y-[20%] bg-[#898da5] brightness-200 rounded-full opacity-50 blur-[80px]" />
+            <div className="pointer-events-none absolute right-0 top-0 h-[500px] w-[500px] -translate-x-[220%] translate-y-[30%] bg-[#5a5f7a] brightness-200 rounded-full opacity-50 blur-[80px]" />
 
-                    <div className="w-full max-h-screen px-4 sm:px-6 md:px-8
-                                    max-w-full sm:max-w-[540px] md:max-w-[720px]
-                                    lg:max-w-[960px] xl:max-w-[1280px] mx-auto
-                                    ">
+            <div className="w-full max-h-screen px-4 sm:px-6 md:px-8
+                            max-w-full sm:max-w-[540px] md:max-w-[720px]
+                            lg:max-w-[960px] xl:max-w-[1280px] mx-auto
+                            ">
 
-                        <Provider>
-
-                            <Tabs defaultValue="dashboard" className="max-h-screen w-full ">
-                                <NavBarContainer />
-                                <DashboardNavBar />
-                                <Suspense fallback={<Loader />}>
-                                    {children}
-                                </Suspense>
-                            </Tabs>
-                        </Provider>
-                        <Toaster />
-                        <Watermark />
-                    </div>
-                </div>
-            </body>
-        </html>
+                <Tabs defaultValue="dashboard" className="max-h-screen w-full ">
+                    <NavBarContainer />
+                    <DashboardNavBar />
+                    <Suspense fallback={<Loader />}>
+                        {children}
+                    </Suspense>
+                </Tabs>
+                <Toaster />
+                <Watermark />
+            </div>
+        </div>
     )
 };

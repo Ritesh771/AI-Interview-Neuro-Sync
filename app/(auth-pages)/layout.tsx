@@ -16,11 +16,9 @@ export const metadata = {
 
 export default function RootLayout({ children, }: { children: React.ReactNode }) {
     return (
-        <html lang="en" className={`${grotesk.className} h-full w-full`}>
-            <body className="bg-[#FFFFFF] h-full w-full">
-                {children}
-                <Watermark />
-            </body>
-        </html>
+        <div className={`${grotesk.className} bg-[#FFFFFF] h-full w-full`}>
+            {children}
+            <Watermark />
+        </div>
     )
 }

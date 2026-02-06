@@ -23,7 +23,6 @@ export async function handleLoginUser(
     await signIn("credentials", {
       ...userData,
       redirect: false,
-      redirectTo: "/",
     });
 
     return { success: true };

@@ -37,7 +37,7 @@ const AuthForm = (props: AuthFormProps) => {
     const [state, formAction, pending] = useActionState(actionFn, initialFormState);
 
     useEffect(() => {
-        if (state.success) router.push("/");
+        if (state.success) router.push("/dashboard");
     }, [state.success])
 
     return (

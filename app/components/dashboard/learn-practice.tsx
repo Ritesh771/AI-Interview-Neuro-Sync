@@ -1,6 +1,9 @@
-import React from 'react'
+'use client'
+
+import React, { useState, useEffect } from 'react'
 import { Button } from '../ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card'
+import { useRouter } from 'next/navigation'
 
 interface TopicData {
   name: string
@@ -10,27 +13,49 @@ interface TopicData {
   difficulty: 'Easy' | 'Medium' | 'Hard'
 }
 
-const codingTopics: TopicData[] = [
-  { name: 'Conditional statements, loops', solved: 16, total: 26, description: 'Coding problem set', difficulty: 'Easy' },
-  { name: 'Arrays', solved: 0, total: 78, description: 'Coding problem set', difficulty: 'Medium' },
-  { name: 'String', solved: 0, total: 69, description: 'Coding problem set', difficulty: 'Medium' },
-  { name: 'Recursion', solved: 0, total: 40, description: 'Coding problem set', difficulty: 'Hard' },
-  { name: 'Searching', solved: 0, total: 38, description: 'Coding problem set', difficulty: 'Medium' },
-  { name: 'Sorting', solved: 0, total: 48, description: 'Coding problem set', difficulty: 'Medium' },
-  { name: 'Linked list', solved: 0, total: 49, description: 'Coding problem set', difficulty: 'Medium' },
-  { name: 'Stack', solved: 0, total: 5, description: 'Coding problem set', difficulty: 'Easy' },
-  { name: 'Queue', solved: 0, total: 30, description: 'Coding problem set', difficulty: 'Easy' },
-  { name: 'Hashing', solved: 0, total: 44, description: 'Coding problem set', difficulty: 'Medium' },
-  { name: 'Trees', solved: 0, total: 50, description: 'Coding problem set', difficulty: 'Hard' },
-  { name: 'Heap', solved: 0, total: 39, description: 'Coding problem set', difficulty: 'Hard' },
-  { name: 'Graphs', solved: 0, total: 39, description: 'Coding problem set', difficulty: 'Hard' },
-  { name: 'Dynamic programming', solved: 0, total: 52, description: 'Coding problem set', difficulty: 'Hard' },
+const initialCodingTopics: Omit<TopicData, 'solved'>[] = [
+  { name: 'Conditional statements, loops', total: 30, description: 'Coding problem set', difficulty: 'Easy' },
+  { name: 'Arrays', total: 30, description: 'Coding problem set', difficulty: 'Medium' },
+  { name: 'String', total: 30, description: 'Coding problem set', difficulty: 'Medium' },
+  { name: 'Recursion', total: 30, description: 'Coding problem set', difficulty: 'Hard' },
+  { name: 'Searching', total: 30, description: 'Coding problem set', difficulty: 'Medium' },
+  { name: 'Sorting', total: 30, description: 'Coding problem set', difficulty: 'Medium' },
+  { name: 'Linked list', total: 30, description: 'Coding problem set', difficulty: 'Medium' },
+  { name: 'Stack', total: 30, description: 'Coding problem set', difficulty: 'Easy' },
+  { name: 'Queue', total: 30, description: 'Coding problem set', difficulty: 'Easy' },
+  { name: 'Hashing', total: 30, description: 'Coding problem set', difficulty: 'Medium' },
+  { name: 'Trees', total: 30, description: 'Coding problem set', difficulty: 'Hard' },
+  { name: 'Heap', total: 30, description: 'Coding problem set', difficulty: 'Hard' },
+  { name: 'Graphs', total: 30, description: 'Coding problem set', difficulty: 'Hard' },
+  { name: 'Dynamic programming', total: 30, description: 'Coding problem set', difficulty: 'Hard' },
 ]
 
 const LearnPracticeSection = () => {
+  const router = useRouter()
+  const [codingTopics, setCodingTopics] = useState<TopicData[]>([])
+
+  useEffect(() => {
+    const topicsWithSolved = initialCodingTopics.map(topic => {
+      const slug = topic.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+      let solved = 0
+      for (let i = 1; i <= topic.total; i++) {
+        if (typeof window !== 'undefined' && localStorage.getItem(`solved-${slug}-${i}`) === 'true') {
+          solved++
+        }
+      }
+      return { ...topic, solved }
+    })
+    setCodingTopics(topicsWithSolved)
+  }, [])
+
   const totalSolved = codingTopics.reduce((sum, topic) => sum + topic.solved, 0)
   const totalProblems = codingTopics.reduce((sum, topic) => sum + topic.total, 0)
-  const overallProgress = Math.round((totalSolved / totalProblems) * 100)
+  const overallProgress = totalProblems > 0 ? Math.round((totalSolved / totalProblems) * 100) : 0
+
+  const handlePracticeClick = (topicName: string) => {
+    const slug = topicName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+    router.push(`/learn-practice/${slug}`)
+  }
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -125,6 +150,7 @@ const LearnPracticeSection = () => {
 
                 <Button
                   size="sm"
+                  onClick={() => handlePracticeClick(topic.name)}
                   className={`w-full font-medium transition-all duration-200 ${
                     isCompleted
                       ? 'bg-green-600 hover:bg-green-700 text-white hover:shadow-md'

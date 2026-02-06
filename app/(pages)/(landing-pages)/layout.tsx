@@ -23,25 +23,13 @@ export default async function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="w-full">
-      <head>
-        <meta charSet="UTF-8" />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1"
-        />
-      </head>
-
-      <body className={`${spaceGrotesk.className} w-full`}>
-        <ReactLenis root options={{ lerp: 0.8, duration: 1.5 }}>
-          <Provider>
-            <NavBar />
-            {children}
-            <Footer />
-            <Watermark />
-          </Provider>
-        </ReactLenis>
-      </body>
-    </html>
+    <div className={`${spaceGrotesk.className} w-full`}>
+      <ReactLenis root options={{ lerp: 0.8, duration: 1.5 }}>
+        <NavBar />
+        {children}
+        <Footer />
+        <Watermark />
+      </ReactLenis>
+    </div>
   );
 }
