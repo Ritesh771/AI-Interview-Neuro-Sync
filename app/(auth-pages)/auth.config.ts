@@ -1,7 +1,6 @@
 import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { compareHash, getUserByEmail } from "../lib/users";
-import Google from "next-auth/providers/google";
 
 export default {
   providers: [
@@ -31,11 +30,6 @@ export default {
           return null;
         }
       },
-    }),
-    Google({
-      clientId: process.env.AUTH_GOOGLE_ID!,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET!,
-      checks: ["state"], // Disable PKCE for development to avoid cookie parsing issues
     }),
   ],
 } satisfies NextAuthConfig;

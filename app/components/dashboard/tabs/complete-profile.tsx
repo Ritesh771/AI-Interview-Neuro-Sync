@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card'
 import { RadialBar, RadialBarChart } from "recharts"
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "../../ui/chart"
 import { SignOutButton } from '../../auth/sign-out'
+import { User, Briefcase, Code, GraduationCap, Award, FileText } from 'lucide-react'
 
 interface ProfileData {
   summary?: string
@@ -228,140 +229,141 @@ const CompleteProfileTab = () => {
   }
 
   if (!isEditing && hasData) {
-    // View mode - Show only the score card as requested
+    // View mode - Professional structured design
     return (
-      <div className='w-full flex flex-col gap-6 pb-10 xl:pb-0 overflow-auto md:overflow-y-none'>
-        <div className='flex justify-between items-center'>
-          <div>
-            <h2 className='text-3xl font-bold text-gray-900'>Your Profile Score</h2>
-            <p className='text-gray-600 mt-1'>AI-powered analysis of your resume</p>
-          </div>
-          <div className='flex items-center gap-2'>
-            <SignOutButton />
-            <Button onClick={() => setIsEditing(true)} className='bg-blue-600 hover:bg-blue-700'>
-              Edit Profile
-            </Button>
+      <div className='w-full flex flex-col gap-8 pb-10 xl:pb-0'>
+        {/* Header Section */}
+        <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">
+                Profile Dashboard
+              </h1>
+              <p className="text-gray-600 text-lg mt-2">AI-powered analysis and insights for your career growth</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <SignOutButton />
+              <Button
+                onClick={() => setIsEditing(true)}
+                className='bg-blue-600 hover:bg-blue-700 text-white'
+              >
+                Edit Profile
+              </Button>
+            </div>
           </div>
         </div>
 
-        {/* Profile Completion Progress and Resume Score Card */}
-        <div className='flex flex-wrap gap-6'>
-          {/* Profile Completion Progress */}
-          <Card className='shadow-sm flex z-10 flex-col gap-0 w-[240px] h-[240px] bg-white/60 rounded-4xl'>
-            <CardHeader className="items-center pb-1">
-              <CardTitle className="text-base">Profile Completion</CardTitle>
-            </CardHeader>
-            <CardContent className="p-2 flex-1 flex flex-col">
-              <div className="flex items-center gap-3 mb-2 flex-1">
-                <ChartContainer
-                  config={chartConfig}
-                  className="flex-1 aspect-square max-h-[80px]"
-                >
-                  <RadialBarChart
-                    data={[
-                      { type: "completion", visitors: progressPercentage, fill: "hsl(var(--chart-1))" },
-                      { type: "remaining", visitors: 100 - progressPercentage, fill: "hsl(var(--chart-2))" },
-                    ]}
-                    innerRadius={20}
-                    outerRadius={40}
-                  >
-                    <ChartTooltip
-                      cursor={false}
-                      content={<ChartTooltipContent hideLabel nameKey="type" />}
-                    />
-                    <RadialBar dataKey="visitors" background={false} />
-                  </RadialBarChart>
-                </ChartContainer>
-                <div className="flex-1 text-center">
-                  <span className='text-xl font-bold text-gray-900'>{progressPercentage}%</span>
-                  <p className='text-xs text-gray-600'>Complete</p>
-                </div>
-              </div>
-
-              {/* User Details */}
-              <div className="space-y-1 text-xs flex-1">
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Interviews:</span>
-                  <span className="font-medium text-gray-900">{interviewStats.total}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Completed:</span>
-                  <span className="font-medium text-green-600">{interviewStats.completed}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">In Progress:</span>
-                  <span className="font-medium text-blue-600">{interviewStats.inProgress}</span>
+        {/* Stats Overview Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Profile Completion */}
+          <Card className="bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
+            <CardContent className="p-6">
+              <div className="text-center">
+                <p className="text-3xl font-bold text-gray-900 mb-2">{progressPercentage}%</p>
+                <p className="text-sm text-gray-600 font-medium">Profile Completion</p>
+                <div className="mt-4 bg-gray-200 rounded-full h-2">
+                  <div
+                    className="bg-blue-600 h-2 rounded-full transition-all duration-500"
+                    style={{ width: `${progressPercentage}%` }}
+                  ></div>
                 </div>
               </div>
             </CardContent>
           </Card>
 
+          {/* Total Interviews */}
+          <Card className="bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
+            <CardContent className="p-6">
+              <div className="text-center">
+                <p className="text-3xl font-bold text-gray-900 mb-2">{interviewStats.total}</p>
+                <p className="text-sm text-gray-600 font-medium">Total Interviews</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Completed Interviews */}
+          <Card className="bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
+            <CardContent className="p-6">
+              <div className="text-center">
+                <p className="text-3xl font-bold text-green-600 mb-2">{interviewStats.completed}</p>
+                <p className="text-sm text-gray-600 font-medium">Completed</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* In Progress */}
+          <Card className="bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
+            <CardContent className="p-6">
+              <div className="text-center">
+                <p className="text-3xl font-bold text-orange-600 mb-2">{interviewStats.inProgress}</p>
+                <p className="text-sm text-gray-600 font-medium">In Progress</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Resume Score Section */}
+        <div className="grid grid-cols-1 gap-8">
           {/* Resume Score Card */}
           {scoreData ? (
-            <Card className='shadow-sm flex z-10 flex-col gap-0 w-[240px] h-[240px] bg-white/60 rounded-4xl'>
-              <CardHeader className="items-center pb-1">
-                <CardTitle className="text-base">Resume Score</CardTitle>
+            <Card className="bg-white border border-gray-200 shadow-sm">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-xl text-gray-900">Resume Score</CardTitle>
               </CardHeader>
-              <CardContent className="p-2 flex-1 flex flex-col">
-                <div className="flex items-center gap-3 mb-2 flex-1">
-                  <ChartContainer
-                    config={chartConfig}
-                    className="flex-1 aspect-square max-h-[80px]"
-                  >
-                    <RadialBarChart
-                      data={[
-                        { type: "score", visitors: scoreData.score, fill: "hsl(var(--chart-1))" },
-                        { type: "remaining", visitors: scoreData.maxScore - scoreData.score, fill: "hsl(var(--chart-2))" },
-                      ]}
-                      innerRadius={20}
-                      outerRadius={40}
-                    >
-                      <ChartTooltip
-                        cursor={false}
-                        content={<ChartTooltipContent hideLabel nameKey="type" />}
-                      />
-                      <RadialBar dataKey="visitors" background={false} />
-                    </RadialBarChart>
-                  </ChartContainer>
-                  <div className="flex-1 text-center">
-                    <span className='text-xl font-bold text-gray-900'>{scoreData.score}/{scoreData.maxScore}</span>
-                    <p className='text-xs text-gray-600'>Score</p>
+              <CardContent>
+                <div className="flex items-center justify-between mb-6">
+                  <div className="text-center">
+                    <p className="text-4xl font-bold text-gray-900">{scoreData.score}</p>
+                    <p className="text-sm text-gray-600">out of {scoreData.maxScore}</p>
+                  </div>
+                  <div className="flex-1 ml-6">
+                    <div className="w-full bg-gray-200 rounded-full h-4 mb-2">
+                      <div
+                        className="bg-blue-600 h-4 rounded-full transition-all duration-1000 ease-out"
+                        style={{ width: `${(scoreData.score / scoreData.maxScore) * 100}%` }}
+                      ></div>
+                    </div>
+                    <p className="text-xs text-gray-600 text-center">Professional Score</p>
                   </div>
                 </div>
 
-                <div className="space-y-1 text-xs flex-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-600">Strengths:</span>
-                    <span className="font-medium text-green-600">{scoreData.strengths.length}</span>
+                <div className="grid grid-cols-3 gap-4 text-center">
+                  <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                    <p className="text-lg font-bold text-gray-900">{scoreData.strengths.length}</p>
+                    <p className="text-xs text-gray-600">Strengths</p>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-600">Areas to Improve:</span>
-                    <span className="font-medium text-yellow-600">{scoreData.weaknesses.length}</span>
+                  <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                    <p className="text-lg font-bold text-gray-900">{scoreData.weaknesses.length}</p>
+                    <p className="text-xs text-gray-600">Improvements</p>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-600">Recommendations:</span>
-                    <span className="font-medium text-blue-600">{scoreData.recommendations.length}</span>
+                  <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                    <p className="text-lg font-bold text-gray-900">{scoreData.recommendations.length}</p>
+                    <p className="text-xs text-gray-600">Recommendations</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
           ) : (
-            <Card className='shadow-sm flex z-10 flex-col gap-0 w-[240px] h-[240px] bg-white/60 rounded-4xl'>
-              <CardHeader className="items-center pb-1">
-                <CardTitle className="text-base">Resume Score</CardTitle>
+            <Card className="bg-white border border-gray-200 shadow-sm">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-xl text-gray-900">Resume Analysis</CardTitle>
               </CardHeader>
-              <CardContent className="p-2 flex-1 flex flex-col items-center justify-center">
-                <p className="text-sm text-gray-600 mb-4 text-center">Get your resume scored by AI</p>
-                <Button 
-                  onClick={calculateResumeScore} 
+              <CardContent className="text-center py-8">
+                <div className="mb-4">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Get AI-Powered Resume Score</h3>
+                  <p className="text-gray-600 text-sm mb-6">Receive detailed analysis and personalized recommendations to improve your resume</p>
+                </div>
+                <Button
+                  onClick={calculateResumeScore}
                   disabled={isScoring}
-                  className='bg-purple-600 hover:bg-purple-700'
+                  className='bg-blue-600 hover:bg-blue-700 text-white'
                 >
-                  {isScoring ? 'Scoring...' : 'Score Resume'}
+                  {isScoring ? 'Analyzing...' : 'Analyze Resume'}
                 </Button>
               </CardContent>
             </Card>
           )}
+
         </div>
 
         {/* Score Details Modal */}
@@ -431,305 +433,489 @@ const CompleteProfileTab = () => {
         )}
 
         {/* Structured Profile Display */}
-        <Card className='shadow-lg bg-gradient-to-br from-white to-blue-50'>
-          <CardHeader>
-            <CardTitle className='text-2xl text-center text-gray-800'>Your Structured Profile</CardTitle>
-          </CardHeader>
-          <CardContent className='space-y-8'>
-            {formData.summary && (
-              <div className='bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500'>
-                <h3 className='text-xl font-bold mb-3 text-gray-800'>
-                  Professional Summary
-                </h3>
-                <p className='text-gray-700 whitespace-pre-line leading-relaxed'>{formData.summary}</p>
-              </div>
-            )}
+        <div className='space-y-8'>
+          <Card className='shadow-lg bg-gradient-to-br from-blue-50 to-indigo-50 border-0'>
+            <CardHeader className='text-center pb-2'>
+              <CardTitle className='text-3xl text-gray-800 flex items-center justify-center gap-3'>
+                <User className="w-8 h-8 text-blue-600" />
+                Your Professional Profile
+              </CardTitle>
+              <p className='text-gray-600 mt-2'>A comprehensive view of your career journey and expertise</p>
+            </CardHeader>
+          </Card>
 
-            {formData.workExperience && (
-              <div className='bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500'>
-                <h3 className='text-xl font-bold mb-4 text-gray-800'>
+          {/* Professional Summary Section */}
+          {formData.summary && (
+            <Card className='shadow-md border-l-4 border-blue-500 bg-gradient-to-r from-blue-50 to-white'>
+              <CardHeader className='pb-3'>
+                <CardTitle className='text-xl text-blue-800 flex items-center gap-2'>
+                  <User className="w-5 h-5" />
+                  Professional Summary
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className='bg-white rounded-lg p-4 shadow-sm border border-blue-100'>
+                  <p className='text-gray-700 whitespace-pre-line leading-relaxed text-base'>{formData.summary}</p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Work Experience Section */}
+          {formData.workExperience && (
+            <Card className='shadow-md border-l-4 border-green-500 bg-gradient-to-r from-green-50 to-white'>
+              <CardHeader className='pb-3'>
+                <CardTitle className='text-xl text-green-800 flex items-center gap-2'>
+                  <Briefcase className="w-5 h-5" />
                   Work Experience
-                </h3>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
                 <div className='space-y-4'>
-                  {formData.workExperience.split('\n\n').map((experience, index) => (
-                    <div key={index} className='relative pl-8 border-l-2 border-gray-200'>
-                      <div className='absolute -left-2 top-0 w-4 h-4 rounded-full bg-green-500'></div>
-                      <div className='whitespace-pre-line text-gray-700'>
-                        {experience}
+                  {formData.workExperience.split('\n\n').filter(exp => exp.trim()).map((experience, index) => (
+                    <div key={index} className='bg-white rounded-lg p-5 shadow-sm border border-green-100 hover:shadow-md transition-shadow duration-200'>
+                      <div className='flex items-start gap-3'>
+                        <div className='flex-shrink-0 w-3 h-3 rounded-full bg-green-500 mt-2'></div>
+                        <div className='flex-1'>
+                          <div className='whitespace-pre-line text-gray-700 leading-relaxed'>{experience.trim()}</div>
+                        </div>
                       </div>
                     </div>
                   ))}
                 </div>
-              </div>
-            )}
+              </CardContent>
+            </Card>
+          )}
 
-            {formData.projects && (
-              <div className='bg-white rounded-xl shadow-md p-6 border-l-4 border-purple-500'>
-                <h3 className='text-xl font-bold mb-4 text-gray-800'>
+          {/* Projects Section */}
+          {formData.projects && (
+            <Card className='shadow-md border-l-4 border-purple-500 bg-gradient-to-r from-purple-50 to-white'>
+              <CardHeader className='pb-3'>
+                <CardTitle className='text-xl text-purple-800 flex items-center gap-2'>
+                  <Code className="w-5 h-5" />
                   Projects
-                </h3>
-                <div className='space-y-4'>
-                  {formData.projects.split('\n\n').map((project, index) => {
-                    // Parse project details
-                    const lines = project.split('\n');
-                    const title = lines[0] || '';
-                    const details = lines.slice(1).join('\n');
-                    
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className='grid gap-4'>
+                  {formData.projects.split('\n\n').filter(project => project.trim()).map((project, index) => {
+                    const lines = project.trim().split('\n');
+                    const title = lines[0] || 'Untitled Project';
+                    const description = lines.slice(1).join('\n').trim();
+
                     return (
-                      <div key={index} className='border border-gray-200 rounded-lg p-5 hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-white to-gray-50'>
-                        <div className='flex items-start mb-3'>
-                          <div className='mr-3 mt-1'>
-                            <div className='w-3 h-3 rounded-full bg-purple-500'></div>
-                          </div>
-                          <h4 className='text-lg font-bold text-gray-800'>{title}</h4>
+                      <div key={index} className='bg-white rounded-lg p-6 shadow-sm border border-purple-100 hover:shadow-lg transition-all duration-300'>
+                        <div className='flex items-start gap-3 mb-3'>
+                          <div className='flex-shrink-0 w-4 h-4 rounded-full bg-purple-500 mt-1'></div>
+                          <h4 className='text-lg font-bold text-gray-800 leading-tight'>{title}</h4>
                         </div>
-                        <div className='ml-6'>
-                          <div className='whitespace-pre-line text-gray-700 text-sm leading-relaxed'>
-                            {details}
+                        {description && (
+                          <div className='ml-7'>
+                            <p className='text-gray-700 whitespace-pre-line leading-relaxed text-sm'>{description}</p>
                           </div>
-                          <div className='mt-4 flex flex-wrap gap-2'>
-                            <span className='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800'>
-                              Project
-                            </span>
-                          </div>
+                        )}
+                        <div className='ml-7 mt-3 flex flex-wrap gap-2'>
+                          <span className='inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 border border-purple-200'>
+                            <Code className="w-3 h-3 mr-1" />
+                            Project
+                          </span>
                         </div>
                       </div>
                     );
                   })}
                 </div>
-              </div>
-            )}
+              </CardContent>
+            </Card>
+          )}
 
-            {formData.skills && (
-              <div className='bg-white rounded-xl shadow-md p-6 border-l-4 border-yellow-500'>
-                <h3 className='text-xl font-bold mb-4 text-gray-800'>
-                  Skills
-                </h3>
-                <div className='flex flex-wrap gap-2'>
-                  {formData.skills.split(',').map((skill, index) => (
-                    <span key={index} className='px-3 py-1.5 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium'>
-                      {skill.trim()}
-                    </span>
-                  ))}
+          {/* Skills Section */}
+          {formData.skills && (
+            <Card className='shadow-md border-l-4 border-yellow-500 bg-gradient-to-r from-yellow-50 to-white'>
+              <CardHeader className='pb-3'>
+                <CardTitle className='text-xl text-yellow-800 flex items-center gap-2'>
+                  <Award className="w-5 h-5" />
+                  Technical Skills
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className='bg-white rounded-lg p-6 shadow-sm border border-yellow-100'>
+                  <div className='flex flex-wrap gap-3'>
+                    {formData.skills.split(',').filter(skill => skill.trim()).map((skill, index) => (
+                      <span key={index} className='inline-flex items-center px-4 py-2 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium border border-yellow-200 hover:bg-yellow-200 transition-colors duration-200'>
+                        {skill.trim()}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              </CardContent>
+            </Card>
+          )}
 
-            {formData.education && (
-              <div className='bg-white rounded-xl shadow-md p-6 border-l-4 border-red-500'>
-                <h3 className='text-xl font-bold mb-4 text-gray-800'>
+          {/* Education Section */}
+          {formData.education && (
+            <Card className='shadow-md border-l-4 border-red-500 bg-gradient-to-r from-red-50 to-white'>
+              <CardHeader className='pb-3'>
+                <CardTitle className='text-xl text-red-800 flex items-center gap-2'>
+                  <GraduationCap className="w-5 h-5" />
                   Education
-                </h3>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
                 <div className='space-y-4'>
-                  {formData.education.split('\n\n').map((edu, index) => (
-                    <div key={index} className='relative pl-8 border-l-2 border-gray-200'>
-                      <div className='absolute -left-2 top-0 w-4 h-4 rounded-full bg-red-500'></div>
-                      <div className='whitespace-pre-line text-gray-700'>
-                        {edu}
+                  {formData.education.split('\n\n').filter(edu => edu.trim()).map((education, index) => (
+                    <div key={index} className='bg-white rounded-lg p-5 shadow-sm border border-red-100 hover:shadow-md transition-shadow duration-200'>
+                      <div className='flex items-start gap-3'>
+                        <div className='flex-shrink-0 w-3 h-3 rounded-full bg-red-500 mt-2'></div>
+                        <div className='flex-1'>
+                          <div className='whitespace-pre-line text-gray-700 leading-relaxed'>{education.trim()}</div>
+                        </div>
                       </div>
                     </div>
                   ))}
                 </div>
-              </div>
-            )}
+              </CardContent>
+            </Card>
+          )}
 
-            {formData.certifications && (
-              <div className='bg-white rounded-xl shadow-md p-6 border-l-4 border-indigo-500'>
-                <h3 className='text-xl font-bold mb-4 text-gray-800'>
+          {/* Certifications Section */}
+          {formData.certifications && (
+            <Card className='shadow-md border-l-4 border-indigo-500 bg-gradient-to-r from-indigo-50 to-white'>
+              <CardHeader className='pb-3'>
+                <CardTitle className='text-xl text-indigo-800 flex items-center gap-2'>
+                  <Award className="w-5 h-5" />
                   Certifications
-                </h3>
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
-                  {formData.certifications.split('\n').map((cert, index) => (
-                    <div key={index} className='flex items-center p-3 bg-indigo-50 rounded-lg'>
-                      <div className='mr-3 text-indigo-500'>
-                        <svg xmlns='http://www.w3.org/2000/svg' className='h-5 w-5' viewBox='0 0 20 20' fill='currentColor'>
-                          <path fillRule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z' clipRule='evenodd' />
-                        </svg>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className='bg-white rounded-lg p-6 shadow-sm border border-indigo-100'>
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
+                    {formData.certifications.split('\n').filter(cert => cert.trim()).map((certification, index) => (
+                      <div key={index} className='flex items-center p-4 bg-indigo-50 rounded-lg border border-indigo-200 hover:bg-indigo-100 transition-colors duration-200'>
+                        <div className='mr-3 text-indigo-600'>
+                          <svg xmlns='http://www.w3.org/2000/svg' className='h-5 w-5' viewBox='0 0 20 20' fill='currentColor'>
+                            <path fillRule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z' clipRule='evenodd' />
+                          </svg>
+                        </div>
+                        <span className='text-gray-700 font-medium'>{certification.trim()}</span>
                       </div>
-                      <span className='text-gray-700'>{cert.trim()}</span>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
+          )}
+        </div>
       </div>
     )
   }
 
   // Edit mode or no data
   return (
-    <div className='w-full flex flex-col gap-5 pb-10 xl:pb-0 overflow-auto md:overflow-y-none'>
-      <div className='flex justify-between items-center'>
-        <div>
-          <div className='text-2xl font-semibold'>
-            {hasData ? 'Edit Your Profile' : 'Complete Your Profile'}
+    <div className='w-full max-w-7xl mx-auto flex flex-col gap-8 pb-10 xl:pb-0'>
+      {/* Header Section */}
+      <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              {hasData ? 'Edit Your Profile' : 'Complete Your Profile'}
+            </h1>
+            <p className="text-gray-600 text-lg mt-2">Add your details to personalize your interview experience.</p>
           </div>
-          <div className='text-lg'>Add your details to personalize your interview experience.</div>
+          <SignOutButton />
         </div>
-        <SignOutButton />
       </div>
 
-      {/* Profile Completion Progress */}
-      <Card className='shadow-sm flex z-10 flex-col gap-0 w-[240px] h-[240px] bg-white/60 rounded-4xl'>
-        <CardHeader className="items-center pb-1">
-          <CardTitle className="text-base">Profile Completion</CardTitle>
-        </CardHeader>
-        <CardContent className="p-2 flex-1 flex flex-col">
-          <div className="flex items-center gap-3 mb-2 flex-1">
-            <ChartContainer
-              config={chartConfig}
-              className="flex-1 aspect-square max-h-[80px]"
-            >
-              <RadialBarChart
-                data={[
-                  { type: "completion", visitors: progressPercentage, fill: "hsl(var(--chart-1))" },
-                  { type: "remaining", visitors: 100 - progressPercentage, fill: "hsl(var(--chart-2))" },
-                ]}
-                innerRadius={20}
-                outerRadius={40}
-              >
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent hideLabel nameKey="type" />}
-                />
-                <RadialBar dataKey="visitors" background={false} />
-              </RadialBarChart>
-            </ChartContainer>
-            <div className="flex-1 text-center">
-              <span className='text-xl font-bold text-gray-900'>{progressPercentage}%</span>
-              <p className='text-xs text-gray-600'>Complete</p>
+      {/* Stats Overview */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        {/* Profile Completion */}
+        <Card className="bg-white border border-gray-200 shadow-sm">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-2xl font-bold text-gray-900">{progressPercentage}%</p>
+                <p className="text-sm text-gray-600">Profile Completion</p>
+              </div>
+              <div className="w-16 h-16">
+                <ChartContainer config={chartConfig} className="w-full h-full">
+                  <RadialBarChart
+                    data={[
+                      { type: "completion", visitors: progressPercentage, fill: "hsl(var(--chart-1))" },
+                      { type: "remaining", visitors: 100 - progressPercentage, fill: "hsl(var(--chart-2))" },
+                    ]}
+                    innerRadius={15}
+                    outerRadius={30}
+                  >
+                    <RadialBar dataKey="visitors" background={false} />
+                  </RadialBarChart>
+                </ChartContainer>
+              </div>
             </div>
-          </div>
+          </CardContent>
+        </Card>
 
-          {/* User Details */}
-          <div className="space-y-1 text-xs flex-1">
-            <div className="flex items-center justify-between">
-              <span className="text-gray-600">Interviews:</span>
-              <span className="font-medium text-gray-900">{interviewStats.total}</span>
+        {/* Total Interviews */}
+        <Card className="bg-white border border-gray-200 shadow-sm">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-blue-100 rounded-lg">
+                <Briefcase className="w-6 h-6 text-blue-600" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-gray-900">{interviewStats.total}</p>
+                <p className="text-sm text-gray-600">Total Interviews</p>
+              </div>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-gray-600">Completed:</span>
-              <span className="font-medium text-green-600">{interviewStats.completed}</span>
+          </CardContent>
+        </Card>
+
+        {/* Completed Interviews */}
+        <Card className="bg-white border border-gray-200 shadow-sm">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-green-100 rounded-lg">
+                <Award className="w-6 h-6 text-green-600" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-green-600">{interviewStats.completed}</p>
+                <p className="text-sm text-gray-600">Completed</p>
+              </div>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-gray-600">In Progress:</span>
-              <span className="font-medium text-blue-600">{interviewStats.inProgress}</span>
+          </CardContent>
+        </Card>
+
+        {/* In Progress */}
+        <Card className="bg-white border border-gray-200 shadow-sm">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-orange-100 rounded-lg">
+                <Code className="w-6 h-6 text-orange-600" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-orange-600">{interviewStats.inProgress}</p>
+                <p className="text-sm text-gray-600">In Progress</p>
+              </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
-      
+          </CardContent>
+        </Card>
+      </div>
+
       {/* AI Parsing Section */}
-      <Card className='border-dashed border-2 border-blue-300 bg-blue-50'>
+      <Card className='border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-white shadow-sm'>
         <CardHeader>
-          <CardTitle className='text-blue-900'>AI-Powered Profile Parsing</CardTitle>
+          <CardTitle className='text-xl text-blue-900 flex items-center gap-2'>
+            <FileText className="w-5 h-5" />
+            AI-Powered Profile Parsing
+          </CardTitle>
         </CardHeader>
         <CardContent className='space-y-4'>
           <div>
-            <Label htmlFor='rawProfile'>Paste your raw profile/resume text here</Label>
+            <Label htmlFor='rawProfile' className="text-gray-700 font-medium">Paste your complete profile or resume text here</Label>
+            <p className="text-sm text-gray-600 mb-2">The AI will automatically extract and structure your information</p>
             <Textarea
               id='rawProfile'
               value={rawProfileText}
               onChange={(e) => setRawProfileText(e.target.value)}
-              placeholder='Paste your complete profile or resume text here. The AI will automatically extract and structure your information...'
+              placeholder='Paste your resume text, LinkedIn profile, or any professional information here...'
               rows={8}
-              className='mt-2'
+              className='mt-2 border-gray-300 focus:border-blue-500'
             />
           </div>
-          <Button 
-            onClick={handleAIParsing} 
+          <Button
+            onClick={handleAIParsing}
             disabled={isParsing || !rawProfileText.trim()}
-            className='bg-blue-600 hover:bg-blue-700'
+            className='bg-blue-600 hover:bg-blue-700 text-white'
           >
             {isParsing ? 'Parsing...' : 'Parse with AI ✨'}
           </Button>
         </CardContent>
       </Card>
-      
-      <form onSubmit={handleSubmit} className='flex flex-col gap-4 max-w-2xl'>
-        <div>
-          <Label htmlFor='summary'>Professional Summary</Label>
-          <Textarea
-            id='summary'
-            name='summary'
-            value={formData.summary || ''}
-            onChange={handleChange}
-            placeholder='Brief summary about yourself...'
-            rows={3}
-          />
+
+      {/* Manual Entry Form */}
+      <div className="space-y-6">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Manual Profile Entry</h2>
+          <p className="text-gray-600">Fill in your details manually or use AI parsing above</p>
         </div>
-        
-        <div>
-          <Label htmlFor='workExperience'>Work Experience</Label>
-          <Textarea
-            id='workExperience'
-            name='workExperience'
-            value={formData.workExperience || ''}
-            onChange={handleChange}
-            placeholder='List your work experience...'
-            rows={4}
-          />
-        </div>
-        
-        <div>
-          <Label htmlFor='projects'>Projects</Label>
-          <Textarea
-            id='projects'
-            name='projects'
-            value={formData.projects || ''}
-            onChange={handleChange}
-            placeholder='Describe your key projects...'
-            rows={4}
-          />
-        </div>
-        
-        <div>
-          <Label htmlFor='skills'>Skills</Label>
-          <Textarea
-            id='skills'
-            name='skills'
-            value={formData.skills || ''}
-            onChange={handleChange}
-            placeholder='List your technical and soft skills...'
-            rows={3}
-          />
-        </div>
-        
-        <div>
-          <Label htmlFor='education'>Education</Label>
-          <Textarea
-            id='education'
-            name='education'
-            value={formData.education || ''}
-            onChange={handleChange}
-            placeholder='Your educational background...'
-            rows={3}
-          />
-        </div>
-        
-        <div>
-          <Label htmlFor='certifications'>Certifications</Label>
-          <Textarea
-            id='certifications'
-            name='certifications'
-            value={formData.certifications || ''}
-            onChange={handleChange}
-            placeholder='List your certifications...'
-            rows={3}
-          />
-        </div>
-        
-        <div className='flex gap-2'>
-          <Button type='submit'>Save Profile</Button>
-          {hasData && (
-            <Button type='button' variant='outline' onClick={() => setIsEditing(false)}>
-              Cancel
+
+        <form onSubmit={handleSubmit} className='space-y-6'>
+          {/* Professional Summary */}
+          <Card className="border border-gray-200 shadow-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <User className="w-5 h-5 text-blue-600" />
+                Professional Summary
+              </CardTitle>
+              <p className="text-sm text-gray-600">Write a compelling summary highlighting your key strengths and career goals</p>
+            </CardHeader>
+            <CardContent>
+              <Textarea
+                id='summary'
+                name='summary'
+                value={formData.summary || ''}
+                onChange={handleChange}
+                placeholder='Example: Results-driven Full-Stack Developer with 3+ years of experience building scalable web applications. Expertise in React, Node.js, and cloud technologies. Passionate about creating user-centric solutions that drive business growth.'
+                rows={4}
+                className="border-gray-300 focus:border-blue-500"
+              />
+            </CardContent>
+          </Card>
+
+          {/* Work Experience */}
+          <Card className="border border-gray-200 shadow-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <Briefcase className="w-5 h-5 text-green-600" />
+                Work Experience
+              </CardTitle>
+              <p className="text-sm text-gray-600">List your work experience with company names, positions, dates, and key responsibilities. Separate each experience with a blank line.</p>
+            </CardHeader>
+            <CardContent>
+              <Textarea
+                id='workExperience'
+                name='workExperience'
+                value={formData.workExperience || ''}
+                onChange={handleChange}
+                placeholder={`Example:
+Senior Full-Stack Developer at TechCorp
+Jan 2023 - Present
+• Led development of microservices architecture serving 100K+ users
+• Implemented CI/CD pipelines reducing deployment time by 60%
+• Mentored junior developers and conducted code reviews
+
+Full-Stack Developer at StartupXYZ
+Jun 2020 - Dec 2022
+• Built responsive web applications using React and Node.js
+• Integrated third-party APIs and payment systems
+• Collaborated with design team to improve UX/UI`}
+                rows={8}
+                className="border-gray-300 focus:border-green-500"
+              />
+            </CardContent>
+          </Card>
+
+          {/* Projects */}
+          <Card className="border border-gray-200 shadow-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <Code className="w-5 h-5 text-purple-600" />
+                Projects
+              </CardTitle>
+              <p className="text-sm text-gray-600">Describe your key projects with titles, technologies used, and your contributions. Separate each project with a blank line.</p>
+            </CardHeader>
+            <CardContent>
+              <Textarea
+                id='projects'
+                name='projects'
+                value={formData.projects || ''}
+                onChange={handleChange}
+                placeholder={`Example:
+E-Commerce Platform
+• Built a full-stack e-commerce solution using React, Node.js, and PostgreSQL
+• Implemented real-time inventory management and payment processing
+• Deployed on AWS with 99.9% uptime and handled 10K+ daily transactions
+
+AI Chat Application
+• Developed an AI-powered chatbot using Python, TensorFlow, and WebSockets
+• Integrated natural language processing for conversational interfaces
+• Reduced customer support tickets by 40% through automated responses`}
+                rows={8}
+                className="border-gray-300 focus:border-purple-500"
+              />
+            </CardContent>
+          </Card>
+
+          {/* Skills */}
+          <Card className="border border-gray-200 shadow-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <Award className="w-5 h-5 text-yellow-600" />
+                Skills
+              </CardTitle>
+              <p className="text-sm text-gray-600">List your technical skills, programming languages, frameworks, and tools. Separate with commas.</p>
+            </CardHeader>
+            <CardContent>
+              <Textarea
+                id='skills'
+                name='skills'
+                value={formData.skills || ''}
+                onChange={handleChange}
+                placeholder='Example: JavaScript, React, Node.js, Python, Django, PostgreSQL, AWS, Docker, Git, Agile, Scrum'
+                rows={4}
+                className="border-gray-300 focus:border-yellow-500"
+              />
+            </CardContent>
+          </Card>
+
+          {/* Education */}
+          <Card className="border border-gray-200 shadow-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <GraduationCap className="w-5 h-5 text-red-600" />
+                Education
+              </CardTitle>
+              <p className="text-sm text-gray-600">List your educational background with degrees, institutions, and graduation dates. Separate each entry with a blank line.</p>
+            </CardHeader>
+            <CardContent>
+              <Textarea
+                id='education'
+                name='education'
+                value={formData.education || ''}
+                onChange={handleChange}
+                placeholder={`Example:
+Master of Computer Science
+Stanford University, 2020
+• GPA: 3.8/4.0
+• Relevant Coursework: Data Structures, Algorithms, Machine Learning
+
+Bachelor of Engineering in Computer Science
+MIT, 2018
+• GPA: 3.7/4.0
+• Capstone Project: AI-Powered Healthcare System`}
+                rows={6}
+                className="border-gray-300 focus:border-red-500"
+              />
+            </CardContent>
+          </Card>
+
+          {/* Certifications */}
+          <Card className="border border-gray-200 shadow-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <Award className="w-5 h-5 text-indigo-600" />
+                Certifications
+              </CardTitle>
+              <p className="text-sm text-gray-600">List your professional certifications with issuing organizations and dates obtained. One certification per line.</p>
+            </CardHeader>
+            <CardContent>
+              <Textarea
+                id='certifications'
+                name='certifications'
+                value={formData.certifications || ''}
+                onChange={handleChange}
+                placeholder={`Example:
+AWS Certified Solutions Architect - Amazon Web Services (2023)
+Google Cloud Professional Developer - Google Cloud (2022)
+Certified Scrum Master - Scrum Alliance (2021)
+React Developer Certification - Meta (2020)`}
+                rows={6}
+                className="border-gray-300 focus:border-indigo-500"
+              />
+            </CardContent>
+          </Card>
+
+          {/* Action Buttons */}
+          <div className='flex gap-4 justify-center pt-6'>
+            <Button type='submit' className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2">
+              Save Profile
             </Button>
-          )}
-        </div>
-      </form>
+            {hasData && (
+              <Button type='button' variant='outline' onClick={() => setIsEditing(false)} className="px-8 py-2">
+                Cancel
+              </Button>
+            )}
+          </div>
+        </form>
+      </div>
     </div>
   )
 }

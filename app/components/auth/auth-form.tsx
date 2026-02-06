@@ -4,7 +4,6 @@ import React, { useActionState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { handleLoginUser, handleSignUpUser } from '@/app/(auth-pages)/lib/form-actions';
-import SocialAccount from '@/app/(auth-pages)/social/page';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 
@@ -94,8 +93,6 @@ const AuthForm = (props: AuthFormProps) => {
                     }
                 </button>
             </form>
-
-            <SocialAccount />
 
             {
                 props.type == "LOGIN" &&
